@@ -50,7 +50,7 @@ ShowTime was built using the following technologies:
 - <img src="https://www.w3.org/html/logo/downloads/HTML5_Logo_512.png" alt="HTML5 Logo" width="24" height="24"> - HTML
 - <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS3 Logo" width="24" height="24"> - CSS
 - <img src="https://cdn.iconscout.com/icon/free/png-512/node-js-1-1174935.png" alt="Node.js Logo" width="24" height="24"> - Node.js
-- <img src="https://assets.twrd.nl/heroku.png" alt="Heroku Logo" width="62" height="24"> - Heroku
+- <img src="https://e7.pngegg.com/pngimages/855/935/png-clipart-heroku-logo-heroku-logo-icons-logos-emojis-tech-companies.png" alt="Heroku Logo" width="62" height="24"> - Heroku
 
 
 
@@ -86,7 +86,7 @@ ShowTime was built using the following technologies:
 Find the full roadmap of the project below! Links to the Trello Board and the Heroku Deployed App:
 
 - <img src="https://cdn.iconscout.com/icon/free/png-256/trello-6-569395.png" alt="Trello Logo" width="24" height="24"> [Trello Board](https://trello.com/b/e8SpOaI8/show-tracker)
-- <img src="https://assets.twrd.nl/heroku.png" alt="Heroku Logo" width="62" height="24"> - [Heroku App](http://show-time.herokuapp.com/)
+- <img src="https://e7.pngegg.com/pngimages/855/935/png-clipart-heroku-logo-heroku-logo-icons-logos-emojis-tech-companies.png" alt="Heroku Logo" width="62" height="24"> - [Heroku App](http://show-time.herokuapp.com/)
 
 
 ### Next Steps 🚀:
