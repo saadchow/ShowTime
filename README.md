@@ -34,7 +34,7 @@
 ## About The Project 📝:
 
 <p align="center">
-<img src=>
+<img src='https://i.imgur.com/ceGQ1bd.png'>
  </p>
 
 ShowTime is a **web-app to share your favourite shows!**.
