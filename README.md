@@ -59,27 +59,12 @@ ShowTime was built using the following technologies:
 
 <h3> App Landing Page </h3>
 
-<p align="center">
-<img width="760" height="460" src=>
- </p>
-
 <h3> Currently Watching </h3>
-
-<p align="center">
-<img width="760" height="460" src=>
- </p>
 
 <h3> Plan to Watch </h3>
 
-<p align="center">
-<img width="760" height="460" src=>
- </p>
-
 <h3> Completed Shows </h3>
 
-<p align="center">
-<img width="760" height="460" src=>
- </p <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Getting Started 🌱:
 
