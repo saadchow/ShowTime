@@ -71,7 +71,7 @@ ShowTime was built using the following technologies:
 Find the full roadmap of the project below! Links to the Trello Board and the Heroku Deployed App:
 
 - <img src="https://cdn.iconscout.com/icon/free/png-256/trello-6-569395.png" alt="Trello Logo" width="24" height="24"> [Trello Board](https://trello.com/b/e8SpOaI8/show-tracker)
-- <img src="https://e7.pngegg.com/pngimages/855/935/png-clipart-heroku-logo-heroku-logo-icons-logos-emojis-tech-companies.png" alt="Heroku Logo" width="62" height="24"> - [Heroku App](http://http://localhost:3000/)
+- <img src="https://e7.pngegg.com/pngimages/855/935/png-clipart-heroku-logo-heroku-logo-icons-logos-emojis-tech-companies.png" alt="Heroku Logo" width="62" height="24"> - [Heroku App](http://localhost:3000/)
 
 
 ### Next Steps 🚀:
