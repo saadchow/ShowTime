@@ -34,7 +34,7 @@
 ## About The Project 📝:
 
 <p align="center">
-<img src="https://i.imgur.com/SfeXfNU.png">
+<img src=>
  </p>
 
 ShowTime is a **web-app to share your favourite shows!**.
@@ -60,25 +60,25 @@ ShowTime was built using the following technologies:
 <h3> App Landing Page </h3>
 
 <p align="center">
-<img width="760" height="460" src="https://i.imgur.com/NBrpLZG.png">
+<img width="760" height="460" src=>
  </p>
 
 <h3> Currently Watching </h3>
 
 <p align="center">
-<img width="760" height="460" src="https://i.imgur.com/0ZV7iba.png">
+<img width="760" height="460" src=>
  </p>
 
 <h3> Plan to Watch </h3>
 
 <p align="center">
-<img width="760" height="460" src="https://i.imgur.com/5YWc0q3.png">
+<img width="760" height="460" src=>
  </p>
 
 <h3> Completed Shows </h3>
 
 <p align="center">
-<img width="760" height="460" src="https://i.imgur.com/Rgbq7LA.png">
+<img width="760" height="460" src=>
  </p <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Getting Started 🌱:
