@@ -7,10 +7,9 @@ import axios from 'axios';
 const Completed = () => {
   const { completed, setCompleted, setNotification } = useContext(AnimeContext);
   const [loading, setLoading] = useState(true);
-  const [hasFetched, setHasFetched] = useState(false);
 
 const removeFromCompleted = (id) => {
-  axios.delete(`http://localhost:5000/api/anime/${id}`)
+  axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
     .then(() => {
       setCompleted(current => current.filter(anime => anime.mal_id !== id));
       setLoading(true); // set loading to true before data is fetched
@@ -23,11 +22,10 @@ const removeFromCompleted = (id) => {
 };
 
 useEffect(() => {
-  axios.get('http://localhost:5000/api/anime/completed')
+  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/completed`)
     .then(response => {
       setCompleted(response.data);
       setLoading(false); // set loading to false after data is fetched
-      setHasFetched(true); 
     })
     .catch(error => {
       console.error("Error fetching anime: ", error);
@@ -36,13 +34,12 @@ useEffect(() => {
 }, [setCompleted, loading]);
 
 
+
    return (
     <ListStyled>
       <div className='body'>
         <h1 style={{ textAlign: 'center' }}>Completed</h1>
-        {!hasFetched ? ( // modify this line
-          <p>Loading...</p>
-        ) : completed.length > 0 ? (
+        {completed && completed.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -54,16 +51,16 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {completed.map((anime, index) => (
+              {completed && completed.map((anime, index) => (
                 <tr key={anime.mal_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/anime/${anime.mal_id}`}>
-                      <img src={anime.images?.jpg?.large_image_url} alt={anime.title} />
+                      <img src={anime.images?.jpg?.large_image_url} alt={anime.title_english || anime.titlee} />
                     </Link>
                   </td>
                   <td>
-                    <strong>{anime.title}</strong><br/>
+                    <strong>{anime.title_english || anime.title}</strong><br/>
                     {anime.type} - {anime.episodes} episode(s)<br/>
                     {anime.aired?.string}<br/>
                     <br/>

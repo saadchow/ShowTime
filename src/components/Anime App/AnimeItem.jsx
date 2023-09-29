@@ -32,44 +32,45 @@ function AnimeItem() {
     const { user } = useClerk();
 
     const addToCurrentlyWatching = () => {
-        axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk
+    axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk
 
-        axios.post('http://localhost:5000/api/anime', { ...anime, list: 'currentlywatching' }, {
-            headers: { 'x-clerk-user-id': user.id }
-      })
-      .then(() => {
+    axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, { ...anime, list: 'currentlywatching' }, {
+        headers: { 'x-clerk-user-id': user.id }
+    })
+    .then(() => {
         setCurrentlyWatching(current => [...current, anime]);
         setNotification(`Anime added to "Currently Watching"`);
-      })
-      .catch(error => console.error("Error adding anime: ", error));
+    })
+    .catch(error => console.error("Error adding anime: ", error));
     };
 
     const addToCompleted = () => {
         // AnimeItem.jsx
         axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk
         console.log('THIS IS THE START OF THE FUNCTION BEFORE THE THEN STATEMENT');
-        axios.post('http://localhost:5000/api/anime', { ...anime, list: 'completed' }, {
+        axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, { ...anime, list: 'completed' }, {
             headers: { 'x-clerk-user-id': user.id }
-      })
-      .then(() => {
+    })
+    .then(() => {
         setNotification(`Anime added to "Completed"`);
-      })
-      .catch(error => console.error("Error adding anime: ", error));
+    })
+    .catch(error => console.error("Error adding anime: ", error));
     };
 
     const addToPlanToWatch = () => {
 
         // AnimeItem.jsx
         axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk 
-        axios.post('http://localhost:5000/api/anime', { ...anime, list: 'plantowatch' }, {
+        axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, { ...anime, list: 'plantowatch' }, {
             headers: { 'x-clerk-user-id': user.id }
-      })
-      .then(() => {
+    })
+    .then(() => {
         setPlanToWatch(current => [...current, anime]);
         setNotification(`Anime added to "Plan To Watch"`);
-      })
-      .catch(error => console.error("Error adding anime: ", error));
+    })
+    .catch(error => console.error("Error adding anime: ", error));
     };
+
 
      const [isExpanded, setIsExpanded] = useState(false);
 
@@ -94,10 +95,11 @@ function AnimeItem() {
                         <p><span>Rank:</span><span>{rank}</span></p>
                         <p><span>Score:</span><span>{score}</span></p>
                         <p><span>Status:</span><span>{status}</span></p>
+                    <div className='button-container'>
                         <button onClick={addToPlanToWatch}>Add to Plan To Watch</button>
                         <button onClick={addToCurrentlyWatching}>Add to Currently Watching</button>
                         <button onClick={addToCompleted}>Add to Completed</button>
-
+                    </div>
                     </div>
                 </div>
                 <p className="description">
@@ -152,6 +154,21 @@ const AnimeItemStyled = styled.div`
     p {
         color: black;
     }
+
+    button {
+      margin: 1vmin;
+      padding: 1vmin;
+      color: black;
+      background-color: orange;
+      font-size: 2vmin;
+      text-decoration: none;
+      text-align: center;
+      border: .1vmin solid var(--tan-2);
+      border-radius: .5vmin;
+      outline: none;
+      cursor: pointer;
+    }
+
     h1{
         display: inline-block;
         font-size: 3rem;
@@ -170,9 +187,6 @@ const AnimeItemStyled = styled.div`
         margin: 3rem 0;
         font-size: 2rem;
         cursor: pointer;
-        background:linear-gradient( to right, #A855F7 23%, #27AE60);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
     }
 
     .description{
@@ -185,7 +199,7 @@ const AnimeItemStyled = styled.div`
             outline: none;
             cursor: pointer;
             font-size: 1.2rem;
-            color: #27AE60;
+            color: white;
             font-weight: 600;
         }
     }
@@ -208,6 +222,7 @@ const AnimeItemStyled = styled.div`
         border-radius: 20px;
         padding: 2rem;
         border: 5px solid #e5e7eb;
+
         .detail{
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -218,14 +233,23 @@ const AnimeItemStyled = styled.div`
         .anime-details{
             display: flex;
             flex-direction: column;
+            
             p{
                 display: flex;
                 gap: 1rem;
+                margin-left: 1em;
             }
             p span:first-child{
                 font-weight: 600;
-                color: #454e56;
+                color: black;
             }
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 3em;
+
         }
     }
 
@@ -243,7 +267,7 @@ const AnimeItemStyled = styled.div`
         .character{
             padding: .4rem .6rem;
             border-radius: 7px;
-            background-color: #EDEDED;
+            background-color: white;
             transition: all .4s ease-in-out;
             img{
                 width: 100%;
@@ -253,7 +277,7 @@ const AnimeItemStyled = styled.div`
                 color: #454e56;
             }
             p{
-                color: #27AE60;
+                color: orange;
             }
             &:hover{
                 transform: translateY(-5px);

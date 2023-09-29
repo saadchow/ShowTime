@@ -42,7 +42,7 @@ const CurrentlyWatching = () => {
     <ListStyled>
       <div className='body'>
         <h1 style={{ textAlign: 'center' }}>Currently Watching</h1>
-        {currentlyWatching.length > 0 ? (
+        {currentlyWatching && currentlyWatching.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -54,16 +54,16 @@ const CurrentlyWatching = () => {
               </tr>
             </thead>
             <tbody>
-              {currentlyWatching.map((anime, index) => (
+              {currentlyWatching && currentlyWatching.map((anime, index) => (
                 <tr key={anime.mal_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/anime/${anime.mal_id}`}>
-                      <img src={anime.images && anime.images.jpg && anime.images.jpg.large_image_url} alt={anime.title} />
+                      <img src={anime.images && anime.images.jpg && anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
                     </Link>
                   </td>
                    <td>
-                    <strong>{anime.title}</strong><br/>
+                    <strong>{anime.title_english || anime.title}</strong><br/>
                     {anime.type} - {anime.episodes} episode(s)<br/>
                     {anime.aired && anime.aired.string}<br/>
                     <br/>

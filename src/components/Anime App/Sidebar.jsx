@@ -13,13 +13,13 @@ function Sidebar() {
 
     return (
         <SidebarStyled>
-            <h3>Top 5 Popular</h3>
+            <h3>Top Anime</h3>
             <div className="anime">
-                {(sorted && sorted.slice(0, 5)).map(function (anime) {
+                {(sorted && sorted.slice(0, 5)) && (sorted.slice(0, 5)).map(function (anime) {
                     return <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
                         <img src={anime.images.jpg.large_image_url} alt="" />
                         <h5>
-                            {anime.title}
+                            {anime.title_english || anime.title}
                         </h5>
                     </Link>
                 })}

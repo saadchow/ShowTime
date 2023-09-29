@@ -17,7 +17,7 @@ mongoose.connect(mongoURI, {
 
 // Middleware
 // server.js
-app.use(cors({ origin: 'http://localhost:3000' })); // replace with the URL of your client
+app.use(cors()); // replace with the URL of your client
 app.use(express.json());
 
 // Routes

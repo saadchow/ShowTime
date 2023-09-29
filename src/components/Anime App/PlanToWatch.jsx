@@ -7,22 +7,22 @@ import axios from 'axios';
 const PlanToWatch = () => {
   const { planToWatch, setPlanToWatch, setCurrentlyWatching, setNotification } = useContext(AnimeContext);
 
-  useEffect(() => {
-  axios.get('http://localhost:5000/api/anime/plantowatch')
+ useEffect(() => {
+  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/plantowatch`)
     .then(response => setPlanToWatch(response.data))
     .catch(error => console.error("Error fetching anime: ", error));
 }, [setPlanToWatch]);
 
-  const removeFromPlanToWatch = (id) => {
-    axios.delete(`http://localhost:5000/api/anime/${id}`)
-      .then(() => {
-        setPlanToWatch(current => current.filter(anime => anime.mal_id !== id));
-        setNotification(`Anime removed from "Plan To Watch"`);
-      })
-      .catch(error => console.error("Error removing anime: ", error));
-  };
+const removeFromPlanToWatch = (id) => {
+  axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
+    .then(() => {
+      setPlanToWatch(current => current.filter(anime => anime.mal_id !== id));
+      setNotification(`Anime removed from "Plan To Watch"`);
+    })
+    .catch(error => console.error("Error removing anime: ", error));
+};
 
-  const addToCurrentlyWatching = (anime) => {
+const addToCurrentlyWatching = (anime) => {
   // First, remove the anime from the "Plan to Watch" list
   removeFromPlanToWatch(anime.mal_id);
 
@@ -30,7 +30,7 @@ const PlanToWatch = () => {
   const updatedAnime = { ...anime, list: 'currentlywatching' };
 
   // Finally, send a POST request to add the updated anime to the "Currently Watching" list
-  axios.post('http://localhost:5000/api/anime', updatedAnime)
+  axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime)
     .then(response => {
       setCurrentlyWatching(current => [...current, response.data]);
       setNotification(`Anime moved to "Currently Watching"`);
@@ -39,11 +39,12 @@ const PlanToWatch = () => {
 };
 
 
+
   return (
     <ListStyled>
       <div className='body'>
         <h1 style={{ textAlign: 'center' }}>Plan to Watch</h1>
-        {planToWatch.length > 0 ? (
+        {planToWatch && planToWatch.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -55,16 +56,16 @@ const PlanToWatch = () => {
               </tr>
             </thead>
             <tbody>
-              {planToWatch.map((anime, index) => (
+              {planToWatch && planToWatch.map((anime, index) => (
                 <tr key={anime.mal_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/anime/${anime.mal_id}`}>
-                      <img src={anime.images.jpg.large_image_url} alt={anime.title} />
+                      <img src={anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
                     </Link>
                   </td>
                    <td>
-                    <strong>{anime.title}</strong><br/>
+                    <strong>{anime.title_english || anime.title}</strong><br/>
                     {anime.type} - {anime.episodes} episode(s)<br/>
                     {anime.aired && anime.aired.string}<br/>
                     <br/>

@@ -12,16 +12,16 @@ function Popular({rendered}) {
   return popularAnime && popularAnime.slice(0, 20).map((anime) => {
     return (
       <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
-        <img src={anime.images.jpg.large_image_url} alt={anime.title} />
-        <p>{anime.title}</p>
+        <img src={anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
+        <p>{anime.title_english || anime.title}</p>
       </Link>
     );
   });
     }else{
         return searchResults.map((anime) => {
             return <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
-                <img src={anime.images.jpg.large_image_url} alt={anime.title} />
-                <p>{anime.title}</p>
+                <img src={anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
+                <p>{anime.title_english || anime.title}</p>
             </Link>
         })
     }

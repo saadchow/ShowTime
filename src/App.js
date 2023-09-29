@@ -10,7 +10,7 @@ import Completed from "./components/Anime App/Completed";
 import PlanToWatch from "./components/Anime App/PlanToWatch";
 import Notification from './components/Anime App/Notification';
 import LandingPage from "./components/Anime App/LandingPage";
-import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn, UserButton } from "@clerk/clerk-react";
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
@@ -18,7 +18,7 @@ if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 function App() {
-  const [rendered, setRendered] = React.useState('popular');
+  const [rendered, setRendered] = React.useState('airing');
   
 
   return (
@@ -26,7 +26,6 @@ function App() {
       <SignedIn>
           <AnimeProvider>
             <BrowserRouter>
-            <UserButton />
               <NavBar />
                 <Routes>
                   <Route path="/" element={<Homepage rendered={rendered} setRendered={setRendered} />} />

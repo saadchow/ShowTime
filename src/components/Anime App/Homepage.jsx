@@ -4,6 +4,7 @@ import Popular from './Popular'
 import styled from 'styled-components'
 import Upcoming from './Upcoming'
 import Airing from './Airing'
+import MyCarousel from './MyCarousel';
 
 function Homepage({ rendered, setRendered }) {
 
@@ -30,17 +31,18 @@ function Homepage({ rendered, setRendered }) {
       case 'upcoming':
         return <Upcoming rendered={rendered} />
       default:
-        return <Popular rendered={rendered} />
+        return <Airing rendered={rendered} />
     }
   }
 
   return (
     <HomepageStyled>
+      <MyCarousel />
       <header>
         <div className="logo">
           <h1>
-            {rendered === 'popular' ? 'Popular Anime' : 
-            rendered === 'airing' ? 'Airing Anime' : 'Upcoming Anime'}
+            {rendered === 'popular' ? 'Most Popular Anime' : 
+            rendered === 'airing' ? 'Currently Airing Anime' : 'Upcoming Anime'}
           </h1>
         </div>
         <div className="search-container">
@@ -83,6 +85,32 @@ const HomepageStyled = styled.div`
     header{
         padding: 2rem 15rem;
     }
+
+    button {
+    margin: 1vmin;
+    padding: 1vmin;
+    color: black;
+    background-color: orange;
+    font-size: 2vmin;
+    text-decoration: none;
+    text-align: center;
+    border: .1vmin solid var(--tan-2);
+    border-radius: .5vmin;
+    outline: none;
+    cursor: pointer;
+
+    /* Add transition for smooth hover effect */
+    transition: all 0.3s ease; 
+}
+
+button:hover {
+    /* Enlarge the button on hover */
+    transform: scale(1.1); 
+
+    /* Lighten the button color on hover */
+    background-color: #ffb732; 
+}
+
 `
 
 export default Homepage

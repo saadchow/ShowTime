@@ -38,7 +38,7 @@ function NavBar() {
           <div className="input-control">
             <input
               type="text"
-              placeholder="Search Anime"
+              placeholder="Search anime..."
               value={search}
               onChange={handleChange}
             />
@@ -49,12 +49,7 @@ function NavBar() {
         </form>
 
         <div className='profile-button' onClick={toggleDropdown}>
-          <button
-            id='icon'
-            className="material-icons"
-          >
-            bookmark
-          </button>
+          <button id='icon'className="material-icons">bookmark</button>
           {/* Use isDropdownOpen state to conditionally display the dropdown */}
           {isDropdownOpen && (
             <div className='dropdown-menu' onClick={(e) => e.stopPropagation()}>
@@ -88,6 +83,20 @@ width: 100%;
 z-index: 100;
 background-color: #21252b;
 
+.dropdown-menu button {
+    margin: 1vmin;
+    padding: 10px 50px;
+    color: white;
+    background-color: orange;
+    font-size: 2vmin;
+    text-decoration: none;
+    text-align: center;
+    border: .1vmin solid var(--tan-2);
+    border-radius: .5vmin;
+    outline: none;
+    cursor: pointer;
+  }
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -96,6 +105,7 @@ background-color: #21252b;
   .search-form {
     display: flex;
     justify-content: center;
+    margin: auto;
     flex-grow: 1; 
     height: 40px;
   }
@@ -129,6 +139,16 @@ background-color: #21252b;
     right: 50px;
     top: -20px;
 
+    #icon {
+      color: orange;
+      /* Add transition for smooth hover effect */
+      transition: all 0.3s ease; 
+    }
+
+    #icon:hover {
+      color: #ffb732; 
+    }
+
     .dropdown-menu {
       display: none;
       position: absolute;
@@ -138,13 +158,16 @@ background-color: #21252b;
       padding: 10px;
       border-radius: 5px;
       z-index: 1; 
+      transition: all 1.5s ease
     }
 
     &:hover .dropdown-menu,
     .dropdown-menu:hover {
       display: block;
+      opacity: 1;
     }
-  }
+}
+
 
   .overlay {
     position: fixed;
@@ -160,7 +183,7 @@ background-color: #21252b;
   }
 
   .yellow {
-    color: yellow;
+    color: orange;
   }
 
   .white {
@@ -173,7 +196,7 @@ background-color: #21252b;
 
   .user-button-wrapper {
   position: relative;
-  right: 20px; /* This moves the UserButton 20px to the left */
+  right: 20px; 
 }
 
 ;`

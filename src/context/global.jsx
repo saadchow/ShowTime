@@ -99,9 +99,18 @@ export const GlobalContextProvider = ({children}) => {
         dispatch({type: Search, payload: data.data})
     }
 
-    React.useEffect (() => {
-        getPopularAnime();
-    }, [])
+    React.useEffect(() => {
+    getPopularAnime();
+
+    // Fetch data for Airing after a delay
+    const timer = setTimeout(() => {
+        getAiringAnime();
+    }, 1000); // 1000 milliseconds = 1 second
+
+    // Clear the timer when the component unmounts
+    return () => clearTimeout(timer);
+    }, []);
+
 
     return (
     <GlobalContext.Provider value={{
@@ -126,3 +135,4 @@ export const GlobalContextProvider = ({children}) => {
 export const useGlobalContext = () => {
     return useContext(GlobalContext);
 }
+
