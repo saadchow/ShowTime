@@ -8,13 +8,13 @@ const CurrentlyWatching = () => {
   const { setCompleted, currentlyWatching, setCurrentlyWatching, setNotification } = useContext(AnimeContext);
 
   useEffect(() => {
-  axios.get('http://localhost:5000/api/anime/currentlywatching')
+  axios.get(`${process.env.REACT_APP_API_URL}api/anime/currentlywatching`)
     .then(response => setCurrentlyWatching(response.data))
     .catch(error => console.error("Error fetching anime: ", error));
 }, [setCurrentlyWatching]);
 
   const removeFromCurrentlyWatching = (id) => {
-    axios.delete(`http://localhost:5000/api/anime/${id}`)
+    axios.delete(`${process.env.REACT_APP_API_URL}api/anime/${id}`)
       .then(() => {
         setCurrentlyWatching(current => current.filter(anime => anime.mal_id !== id));
         setNotification(`Anime removed from "Currently Watching"`);
@@ -30,7 +30,7 @@ const CurrentlyWatching = () => {
   const updatedAnime = { ...anime, list: 'completed' };
 
   // Finally, send a POST request to add the updated anime to the "Completed" list
-  axios.post('http://localhost:5000/api/anime', updatedAnime)
+  axios.post(`${process.env.REACT_APP_API_URL}api/anime`, updatedAnime)
     .then(response => {
       setCompleted(current => [...current, response.data]);
       setNotification(`Anime moved to "Completed"`);

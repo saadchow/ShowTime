@@ -22,7 +22,7 @@ const removeFromCompleted = (id) => {
 };
 
 useEffect(() => {
-  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/completed`)
+  axios.get(`${process.env.REACT_APP_API_URL}api/anime/completed`)
     .then(response => {
       setCompleted(response.data);
       setLoading(false); // set loading to false after data is fetched

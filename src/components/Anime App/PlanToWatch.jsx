@@ -8,13 +8,13 @@ const PlanToWatch = () => {
   const { planToWatch, setPlanToWatch, setCurrentlyWatching, setNotification } = useContext(AnimeContext);
 
  useEffect(() => {
-  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/plantowatch`)
+  axios.get(`${process.env.REACT_APP_API_URL}api/anime/plantowatch`)
     .then(response => setPlanToWatch(response.data))
     .catch(error => console.error("Error fetching anime: ", error));
 }, [setPlanToWatch]);
 
 const removeFromPlanToWatch = (id) => {
-  axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
+  axios.delete(`${process.env.REACT_APP_API_URL}api/anime/${id}`)
     .then(() => {
       setPlanToWatch(current => current.filter(anime => anime.mal_id !== id));
       setNotification(`Anime removed from "Plan To Watch"`);
@@ -30,7 +30,7 @@ const addToCurrentlyWatching = (anime) => {
   const updatedAnime = { ...anime, list: 'currentlywatching' };
 
   // Finally, send a POST request to add the updated anime to the "Currently Watching" list
-  axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime)
+  axios.post(`${process.env.REACT_APP_API_URL}api/anime`, updatedAnime)
     .then(response => {
       setCurrentlyWatching(current => [...current, response.data]);
       setNotification(`Anime moved to "Currently Watching"`);
