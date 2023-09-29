@@ -34,7 +34,7 @@ function AnimeItem() {
     const addToCurrentlyWatching = () => {
     axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk
 
-    axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, { ...anime, list: 'currentlywatching' }, {
+    axios.post(`${process.env.REACT_APP_API_URL}api/anime`, { ...anime, list: 'currentlywatching' }, {
         headers: { 'x-clerk-user-id': user.id }
     })
     .then(() => {
@@ -48,7 +48,7 @@ function AnimeItem() {
         // AnimeItem.jsx
         axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk
         console.log('THIS IS THE START OF THE FUNCTION BEFORE THE THEN STATEMENT');
-        axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, { ...anime, list: 'completed' }, {
+        axios.post(`${process.env.REACT_APP_API_URL}api/anime`, { ...anime, list: 'completed' }, {
             headers: { 'x-clerk-user-id': user.id }
     })
     .then(() => {
@@ -61,7 +61,7 @@ function AnimeItem() {
 
         // AnimeItem.jsx
         axios.defaults.headers.common['x-clerk-user-id'] = user.id; // replace 'user-id' with actual user id from Clerk 
-        axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, { ...anime, list: 'plantowatch' }, {
+        axios.post(`${process.env.REACT_APP_API_URL}api/anime`, { ...anime, list: 'plantowatch' }, {
             headers: { 'x-clerk-user-id': user.id }
     })
     .then(() => {
