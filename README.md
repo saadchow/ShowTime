@@ -1,8 +1,8 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-  <h1 align="center">ShowTime</h1>
+  <h1 align="center"><a href="https://show-time-a09774f7fe38.herokuapp.com/">ShowTime</a></h1>
   <p align="center">
-    Your personal show tracker! <a href="https://show-time-a09774f7fe38.herokuapp.com/">Visit the app!</a>
+    Your personal show tracker!
   </p>
 </div>
 
