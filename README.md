@@ -2,7 +2,7 @@
 <div align="center">
   <h1 align="center">ShowTime</h1>
   <p align="center">
-    Your personal show tracker!
+    Your personal show tracker! [Visit the app!](https://show-time-a09774f7fe38.herokuapp.com/).
   </p>
 </div>
 
@@ -28,15 +28,16 @@ ShowTime is your go-to application for tracking your favorite shows. Whether you
 
 ShowTime was built using the following technologies:
 
-- <img src="https://reactjs.org/favicon.ico" alt="React.js" width="24" height="24"> React.js
-- <img src="https://www.clerk.dev/images/clerk-auth.png" alt="Clerk Auth" width="24" height="24"> Clerk Auth
-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/600px-JavaScript-logo.png" alt="JavaScript" width="24" height="24"> JavaScript
-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1000px-HTML5_logo_and_wordmark.svg.png" alt="HTML" width="24" height="24"> HTML
-- <img src="https://www.pngkey.com/png/full/52-523074_css3-html-css-logo-png.png" alt="CSS" width="24" height="24"> CSS
-- <img src="https://webassets.mongodb.com/_com_assets/cms/MongoDB_Logo_FullColorBlack_RGB-4td3yuxzjs.png" alt="MongoDB" width="24" height="24"> MongoDB
-- <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="Express" width="24" height="24"> Express
-- <img src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png" alt="Node.js" width="24" height="24"> Node.js
-- <img src="https://avatars.githubusercontent.com/u/2301781?s=200&v=4" alt="Jikan API" width="24" height="24"> Jikan API
+- [![React.js](https://img.shields.io/badge/-React.js-61DAFB?logo=react&logoColor=white&style=for-the-badge)](https://reactjs.org/)
+- [![Clerk Auth](https://img.shields.io/badge/-Clerk_Auth-21B573?style=for-the-badge)](https://www.clerk.dev/)
+- [![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black&style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [![HTML](https://img.shields.io/badge/-HTML-E34F26?logo=html5&logoColor=white&style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+- [![CSS](https://img.shields.io/badge/-CSS-1572B6?logo=css3&logoColor=white&style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+- [![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge)](https://www.mongodb.com/)
+- [![Express.js](https://img.shields.io/badge/-Express.js-000000?logo=express&logoColor=white&style=for-the-badge)](https://expressjs.com/)
+- [![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge)](https://nodejs.org/)
+- [![Jikan API](https://img.shields.io/badge/-Jikan_API-00A495?style=for-the-badge)](https://jikan.moe/)
+
 
 
 ## App Overview 📱
@@ -54,6 +55,8 @@ ShowTime was built using the following technologies:
 ### Getting Started 🌱
 
 To get started with ShowTime, visit [the deployed app](https://show-time-a09774f7fe38.herokuapp.com/). You can log in and start tracking your favorite shows in no time!
+
+Here is the [Trello Board](https://trello.com/b/e8SpOaI8/show-tracker) to view the development process!
 
 ## Next Steps 🚀
 
