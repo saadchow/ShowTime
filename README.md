@@ -28,15 +28,15 @@ ShowTime is your go-to application for tracking your favorite shows. Whether you
 
 ShowTime was built using the following technologies:
 
-- React.js
-- Clerk Auth
-- JavaScript
-- HTML
-- CSS
-- MongoDB
-- Express
-- Node.js
-- Jikan API
+- !React
+- !Clerk
+- !JavaScript
+- !HTML
+- !CSS
+- !MongoDB
+- !Express
+- !Node.js
+- !Jikan API
 
 ## App Overview 📱
 
@@ -55,10 +55,10 @@ ShowTime was built using the following technologies:
 
 ### Getting Started 🌱
 
-To get started with ShowTime, visit our [deployed app](https://show-time-a09774f7fe38.herokuapp.com/). You can log in and start tracking your favorite shows in no time!
+To get started with ShowTime, visit [the deployed app](https://show-time-a09774f7fe38.herokuapp.com/). You can log in and start tracking your favorite shows in no time!
 
 ## Next Steps 🚀
 
-- Add by-episode completion based tracker to specific show.
+- Add by-episode completion-based tracker to a specific show.
 - Add links to watch a show on popular streaming sites or watch shows natively.
 - Add messaging functionality to allow users to connect with others and explore interesting shows together.
