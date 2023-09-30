@@ -2,7 +2,7 @@
 <div align="center">
   <h1 align="center">ShowTime</h1>
   <p align="center">
-    Your personal show tracker! [Visit the app](https://show-time-a09774f7fe38.herokuapp.com/)
+    Your personal show tracker! sdaasd [Visit the app](https://show-time-a09774f7fe38.herokuapp.com/)
   </p>
 </div>
 
