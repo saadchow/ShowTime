@@ -28,20 +28,18 @@ ShowTime is your go-to application for tracking your favorite shows. Whether you
 
 ShowTime was built using the following technologies:
 
-- !React
-- !Clerk
-- !JavaScript
-- !HTML
-- !CSS
-- !MongoDB
-- !Express
-- !Node.js
-- !Jikan API
+- <img src="https://reactjs.org/favicon.ico" alt="React.js" width="24" height="24"> React.js
+- <img src="https://www.clerk.dev/images/clerk-auth.png" alt="Clerk Auth" width="24" height="24"> Clerk Auth
+- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/600px-JavaScript-logo.png" alt="JavaScript" width="24" height="24"> JavaScript
+- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1000px-HTML5_logo_and_wordmark.svg.png" alt="HTML" width="24" height="24"> HTML
+- <img src="https://www.pngkey.com/png/full/52-523074_css3-html-css-logo-png.png" alt="CSS" width="24" height="24"> CSS
+- <img src="https://webassets.mongodb.com/_com_assets/cms/MongoDB_Logo_FullColorBlack_RGB-4td3yuxzjs.png" alt="MongoDB" width="24" height="24"> MongoDB
+- <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="Express" width="24" height="24"> Express
+- <img src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png" alt="Node.js" width="24" height="24"> Node.js
+- <img src="https://avatars.githubusercontent.com/u/2301781?s=200&v=4" alt="Jikan API" width="24" height="24"> Jikan API
+
 
 ## App Overview 📱
-
-### App Landing Page
-![Landing Page](https://i.imgur.com/sIhqpiO.png)
 
 ### Browse Anime
 ![Browse Anime](https://i.imgur.com/hw0QSfi.png)
