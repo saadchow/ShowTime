@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-// models/Anime.js
 const mongoose = require('mongoose');
 
 const animeSchema = new mongoose.Schema({
@@ -38,4 +36,3 @@ const animeSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Anime', animeSchema);
->>>>>>> c9675de (Initial Heroku deploy)
