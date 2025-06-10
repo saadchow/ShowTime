@@ -13,14 +13,16 @@ const CurrentlyWatching = () => {
     .catch(error => console.error("Error fetching anime: ", error));
 }, [setCurrentlyWatching]);
 
-  const removeFromCurrentlyWatching = (id) => {
-    axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
-      .then(() => {
-        setCurrentlyWatching(current => current.filter(anime => anime.mal_id !== id));
-        setNotification(`Anime removed from "Currently Watching"`);
-      })
-      .catch(error => console.error("Error removing anime: ", error));
-  };
+  const removeFromCurrentlyWatching = async (id) => {
+  try {
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`);
+    setCurrentlyWatching(current => current.filter(anime => anime.mal_id !== id));
+    setNotification(`Anime removed from "Currently Watching"`);
+  } catch (error) {
+    console.error("Error removing anime: ", error);
+  }
+};
+
 
  const addToCompleted = async (anime) => {
   try {
