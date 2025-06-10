@@ -22,9 +22,25 @@ const CurrentlyWatching = () => {
       .catch(error => console.error("Error removing anime: ", error));
   };
 
-  const addToCompleted = (anime) => {
-  // First, remove the anime from the "Currently Watching" list
-  removeFromCurrentlyWatching(anime.mal_id);
+ const addToCompleted = async (anime) => {
+  try {
+    // Step 1: Delete from currently watching
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${anime.mal_id}`);
+
+    // Step 2: Create updated anime object
+    const updatedAnime = { ...anime, list: 'completed' };
+
+    // Step 3: Add to completed
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime);
+
+    setCompleted(current => [...current, response.data]);
+    setCurrentlyWatching(current => current.filter(a => a.mal_id !== anime.mal_id));
+    setNotification(`Anime moved to "Completed"`);
+  } catch (error) {
+    console.error("Error moving anime: ", error);
+  }
+};
+
 
   // Then, create a new anime object with the list value set to 'completed'
   const updatedAnime = { ...anime, list: 'completed' };
