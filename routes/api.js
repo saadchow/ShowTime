@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const express = require('express');
 const router = express.Router();
 
@@ -132,4 +131,3 @@ router.delete('/anime/:id', (req, res) => {
 });
 
 module.exports = router;
->>>>>>> c9675de (Initial Heroku deploy)
