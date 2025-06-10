@@ -22,20 +22,23 @@ const removeFromPlanToWatch = (id) => {
     .catch(error => console.error("Error removing anime: ", error));
 };
 
-const addToCurrentlyWatching = (anime) => {
-  // First, remove the anime from the "Plan to Watch" list
-  removeFromPlanToWatch(anime.mal_id);
+const addToCurrentlyWatching = async (anime) => {
+  try {
+    // Wait for the deletion to finish
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${anime.mal_id}`);
 
-  // Then, create a new anime object with the list value set to 'currentlywatching'
-  const updatedAnime = { ...anime, list: 'currentlywatching' };
+    // Create updated anime
+    const updatedAnime = { ...anime, list: 'currentlywatching' };
 
-  // Finally, send a POST request to add the updated anime to the "Currently Watching" list
-  axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime)
-    .then(response => {
-      setCurrentlyWatching(current => [...current, response.data]);
-      setNotification(`Anime moved to "Currently Watching"`);
-    })
-    .catch(error => console.error("Error adding anime: ", error));
+    // Add new anime to "Currently Watching"
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime);
+
+    setCurrentlyWatching(current => [...current, response.data]);
+    setPlanToWatch(current => current.filter(a => a.mal_id !== anime.mal_id));
+    setNotification(`Anime moved to "Currently Watching"`);
+  } catch (error) {
+    console.error("Error moving anime: ", error);
+  }
 };
 
 
