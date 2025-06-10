@@ -31,13 +31,12 @@
     "styled-components": "^6.0.8",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
+ "scripts": {
   "start": "node server.js",
   "server": "node server.js",
   "build": "cd client && npm install && npm run build",
   "test": "react-scripts test",
-  "eject": "react-scripts eject",
-  "heroku-postbuild": "cd client && npm install && npm run build"
+  "eject": "react-scripts eject"
 },
   "eslintConfig": {
     "extends": [
