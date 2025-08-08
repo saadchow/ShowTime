@@ -117,39 +117,65 @@ const CurrentlyWatching = () => {
 const ListStyled = styled.div`
   display: flex;
   padding-top: 60px;
-  background: black;
-  color: white;
+  background: var(--bg);
+  color: var(--text);
 
-  .body { background: black; width: 70%; margin: auto; }
+  .body {
+    background: var(--bg);
+    width: min(1100px, 90%);
+    margin: auto;
+  }
 
   button {
-    width: 30px; height: 30px; margin-right: 10px;
-    background: transparent; border: none;
+    width: 34px;
+    height: 34px;
+    margin-right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
   }
 
   .material-icons {
-    color: white; stroke: white; stroke-width: 1px;
-    margin-right: 5px; align-self: center; cursor: pointer;
+    color: var(--accent);
+    margin-right: 5px;
+    align-self: center;
   }
 
-  #star { position: relative; top: 4px; }
+  #star { position: relative; top: 4px; color: var(--accent); }
 
-  span { font-weight: bold; color: white; }
+  span { font-weight: 600; color: var(--accent); }
 
-  table { width: 100%; margin-left: auto; margin-right: auto; text-align: center; }
+  table {
+    width: 100%;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--ring);
+    border-radius: 12px;
+    overflow: hidden;
+  }
 
-  img { width: 100px; height: auto; }
+  thead th {
+    background: #f1f5f9;
+    color: var(--text);
+  }
 
-  th, td { padding: 15px; }
+  img { width: 100px; height: auto; border-radius: 8px; }
 
-  tr { border-bottom: 1px solid white; }
+  th, td { padding: 16px; }
 
-  strong { font-size: calc(1em + 5px); }
+  tr { border-bottom: 1px solid var(--ring); }
+  tr:last-child { border-bottom: none; }
 
-  td:nth-child(3) { font-size: calc(1em - 5px); text-align: left; }
+  strong { color: var(--text); }
+
+  td:nth-child(3) {
+    font-size: 0.95rem;
+    text-align: left;
+    color: var(--muted);
+  }
 
   th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) {
-    width: calc(1em + 100px);
+    width: 140px;
   }
 `;
 
