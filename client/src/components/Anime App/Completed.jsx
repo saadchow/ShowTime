@@ -1,45 +1,51 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimeContext } from './AnimeContext';
 import styled from 'styled-components';
-import axios from 'axios';
+import { AnimeContext } from './AnimeContext';
+import { useClerk } from '@clerk/clerk-react';
+import api from '../../lib/api';
 
 const Completed = () => {
   const { completed, setCompleted, setNotification } = useContext(AnimeContext);
   const [loading, setLoading] = useState(true);
+  const { user } = useClerk();
 
-const removeFromCompleted = (id) => {
-  axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
-    .then(() => {
-      setCompleted(current => current.filter(anime => anime.mal_id !== id));
-      setLoading(true); // set loading to true before data is fetched
-      setNotification(`Anime removed from Completed`);
-    })
-    .catch(error => {
-      console.error("Error removing anime: ", error);
-      console.log('Error details:', error.response); // log the error details
-    });
-};
+  useEffect(() => {
+    if (user?.id) api.defaults.headers.common['x-clerk-user-id'] = user.id;
+  }, [user]);
 
-useEffect(() => {
-  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/completed`)
-    .then(response => {
-      setCompleted(response.data);
-      setLoading(false); // set loading to false after data is fetched
-    })
-    .catch(error => {
-      console.error("Error fetching anime: ", error);
-      console.log('Error details:', error.response); // log the error details
-    });
-}, [setCompleted, loading]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get(`anime?list=completed`);
+        setCompleted(Array.isArray(res.data) ? res.data : []);
+      } catch (e) {
+        console.error('Error fetching completed:', e);
+        setCompleted([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [setCompleted]);
 
+  const removeFromCompleted = async (mal_id) => {
+    try {
+      await api.delete(`anime/${mal_id}`);
+      setCompleted((cur) => cur.filter((a) => a.mal_id !== mal_id));
+      setNotification('Anime removed from Completed');
+    } catch (e) {
+      console.error('Error removing anime:', e);
+    }
+  };
 
-
-   return (
+  const items = Array.isArray(completed) ? completed : [];
+  return (
     <ListStyled>
       <div className='body'>
         <h1 style={{ textAlign: 'center' }}>Completed</h1>
-        {completed && completed.length > 0 ? (
+        {loading ? (
+          <p style={{ color: 'grey', textAlign: 'center' }}>Loading…</p>
+        ) : items.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -51,40 +57,42 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {completed && completed.map((anime, index) => (
+              {items.map((anime, index) => (
                 <tr key={anime.mal_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/anime/${anime.mal_id}`}>
-                      <img src={anime.images?.jpg?.large_image_url} alt={anime.title_english || anime.titlee} />
+                      <img
+                        src={anime.images?.jpg?.large_image_url}
+                        alt={anime.title_english || anime.title || 'Anime'}
+                      />
                     </Link>
                   </td>
                   <td>
                     <strong>{anime.title_english || anime.title}</strong><br/>
                     {anime.type} - {anime.episodes} episode(s)<br/>
-                    {anime.aired?.string}<br/>
-                    <br/>
-                    {anime.synopsis.length > 100 
+                    {anime.aired?.string}<br/><br/>
+                    {(anime.synopsis || '').length > 300
                       ? <>
-                          {anime.synopsis.substring(0, 300)}...
+                          {(anime.synopsis || '').substring(0, 300)}…
                           <Link to={`/anime/${anime.mal_id}`}><span>Read More</span></Link>
                         </>
-                      : anime.synopsis
+                      : (anime.synopsis || '')
                     }
                   </td>
                   <td className="score">
-                    <i id="star" class="material-icons">star</i>{anime.score}
+                    <i id="star" className="material-icons">star</i>{anime.score}
                   </td>
                   <td>
-                    <button onClick={() => removeFromCompleted(anime.mal_id)}title="Delete">
-                    <i class="material-icons">delete</i>
+                    <button onClick={() => removeFromCompleted(anime.mal_id)} title="Delete">
+                      <i className="material-icons">delete</i>
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          ) : (
+        ) : (
           <p style={{ color: 'grey', textAlign: 'center' }}>
             No entries: Add any anime to this list to start tracking!
           </p>
@@ -95,7 +103,7 @@ useEffect(() => {
 };
 
 const ListStyled = styled.div`
-   display: flex;
+  display: flex;
   padding-top: 60px;
   background: black;
   color: white;
@@ -107,8 +115,8 @@ const ListStyled = styled.div`
   }
 
   button {
-    width: 30px; 
-    height: 30px; 
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
     background: transparent;
     border: none;
@@ -123,15 +131,9 @@ const ListStyled = styled.div`
     cursor: pointer;
   }
 
-  #star {
-    position: relative;
-    top: 4px;
-  }
-  
-  span {
-    font-weight: bold;
-    color: white;
-  }
+  #star { position: relative; top: 4px; }
+
+  span { font-weight: bold; color: white; }
 
   table {
     width: 100%;
@@ -140,22 +142,13 @@ const ListStyled = styled.div`
     text-align: center;
   }
 
-  img {
-    width: 100px;
-    height: auto;
-  }
+  img { width: 100px; height: auto; }
 
-  th, td {
-    padding: 15px;
-  }
+  th, td { padding: 15px; }
 
-  tr {
-    border-bottom: 1px solid white;
-  }
+  tr { border-bottom: 1px solid white; }
 
-  strong {
-    font-size: calc(1em + 5px); 
-  }
+  strong { font-size: calc(1em + 5px); }
 
   td:nth-child(3) {
     font-size: calc(1em - 5px);
@@ -165,7 +158,6 @@ const ListStyled = styled.div`
   th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) {
     width: calc(1em + 100px);
   }
-
 `;
 
 export default Completed;
