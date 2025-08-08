@@ -1,53 +1,59 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimeContext } from './AnimeContext';
 import styled from 'styled-components';
-import axios from 'axios';
+import { AnimeContext } from './AnimeContext';
+import { useClerk } from '@clerk/clerk-react';
+import api from '../../lib/api';
 
 const PlanToWatch = () => {
   const { planToWatch, setPlanToWatch, setCurrentlyWatching, setNotification } = useContext(AnimeContext);
+  const { user } = useClerk();
 
- useEffect(() => {
-  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/plantowatch`)
-    .then(response => setPlanToWatch(response.data))
-    .catch(error => console.error("Error fetching anime: ", error));
-}, [setPlanToWatch]);
+  useEffect(() => {
+    if (user?.id) api.defaults.headers.common['x-clerk-user-id'] = user.id;
+  }, [user]);
 
-const removeFromPlanToWatch = (id) => {
-  axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
-    .then(() => {
-      setPlanToWatch(current => current.filter(anime => anime.mal_id !== id));
-      setNotification(`Anime removed from "Plan To Watch"`);
-    })
-    .catch(error => console.error("Error removing anime: ", error));
-};
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get(`anime?list=plantowatch`);
+        setPlanToWatch(Array.isArray(res.data) ? res.data : []);
+      } catch (e) {
+        console.error('Error fetching plan to watch:', e);
+        setPlanToWatch([]);
+      }
+    })();
+  }, [setPlanToWatch]);
 
-const addToCurrentlyWatching = async (anime) => {
-  try {
-    // Wait for the deletion to finish
-    await axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${anime.mal_id}`);
+  const removeFromPlanToWatch = async (mal_id) => {
+    try {
+      await api.delete(`anime/${mal_id}`);
+      setPlanToWatch((cur) => cur.filter((a) => a.mal_id !== mal_id));
+      setNotification('Anime removed from "Plan To Watch"');
+    } catch (e) {
+      console.error('Error removing anime:', e);
+    }
+  };
 
-    // Create updated anime
-    const updatedAnime = { ...anime, list: 'currentlywatching' };
+  const addToCurrentlyWatching = async (anime) => {
+    try {
+      const res = await api.put(`anime/${anime.mal_id}`, { list: 'currentlywatching' });
+      const moved = res.data || { ...anime, list: 'currentlywatching' };
 
-    // Add new anime to "Currently Watching"
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime);
+      setCurrentlyWatching((cur) => [moved, ...cur]);
+      setPlanToWatch((cur) => cur.filter((a) => a.mal_id !== anime.mal_id));
+      setNotification('Anime moved to "Currently Watching"');
+    } catch (e) {
+      console.error('Error moving anime:', e);
+    }
+  };
 
-    setCurrentlyWatching(current => [...current, response.data]);
-    setPlanToWatch(current => current.filter(a => a.mal_id !== anime.mal_id));
-    setNotification(`Anime moved to "Currently Watching"`);
-  } catch (error) {
-    console.error("Error moving anime: ", error);
-  }
-};
-
-
-
+  const items = Array.isArray(planToWatch) ? planToWatch : [];
   return (
     <ListStyled>
       <div className='body'>
         <h1 style={{ textAlign: 'center' }}>Plan to Watch</h1>
-        {planToWatch && planToWatch.length > 0 ? (
+        {items.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -59,36 +65,38 @@ const addToCurrentlyWatching = async (anime) => {
               </tr>
             </thead>
             <tbody>
-              {planToWatch && planToWatch.map((anime, index) => (
+              {items.map((anime, index) => (
                 <tr key={anime.mal_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/anime/${anime.mal_id}`}>
-                      <img src={anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
+                      <img
+                        src={anime.images?.jpg?.large_image_url}
+                        alt={anime.title_english || anime.title || 'Anime'}
+                      />
                     </Link>
                   </td>
-                   <td>
+                  <td>
                     <strong>{anime.title_english || anime.title}</strong><br/>
                     {anime.type} - {anime.episodes} episode(s)<br/>
-                    {anime.aired && anime.aired.string}<br/>
-                    <br/>
-                    {anime.synopsis.length > 100 
+                    {anime.aired?.string}<br/><br/>
+                    {(anime.synopsis || '').length > 300
                       ? <>
-                          {anime.synopsis.substring(0, 300)}...
+                          {(anime.synopsis || '').substring(0, 300)}…
                           <Link to={`/anime/${anime.mal_id}`}><span>Read More</span></Link>
                         </>
-                      : anime.synopsis
+                      : (anime.synopsis || '')
                     }
                   </td>
                   <td className="score">
-                     <i id="star" class="material-icons">star</i>{anime.score}
+                    <i id="star" className="material-icons">star</i>{anime.score}
                   </td>
-                   <td>
-                    <button onClick={() => addToCurrentlyWatching(anime)}title="Add to Currently Watching">
-                      <i class="material-icons">add</i>
+                  <td>
+                    <button onClick={() => addToCurrentlyWatching(anime)} title="Add to Currently Watching">
+                      <i className="material-icons">add</i>
                     </button>
-                    <button onClick={() => removeFromPlanToWatch(anime.mal_id)}title="Delete">
-                     <i class="material-icons">delete</i>
+                    <button onClick={() => removeFromPlanToWatch(anime.mal_id)} title="Delete">
+                      <i className="material-icons">delete</i>
                     </button>
                   </td>
                 </tr>
@@ -105,79 +113,43 @@ const addToCurrentlyWatching = async (anime) => {
   );
 };
 
-
 const ListStyled = styled.div`
-   display: flex;
+  display: flex;
   padding-top: 60px;
   background: black;
   color: white;
 
-  .body {
-    background: black;
-    width: 70%;
-    margin: auto;
-  }
+  .body { background: black; width: 70%; margin: auto; }
 
   button {
-    width: 30px; 
-    height: 30px; 
-    margin-right: 10px;
-    background: transparent;
-    border: none;
+    width: 30px; height: 30px; margin-right: 10px;
+    background: transparent; border: none;
   }
 
   .material-icons {
-    color: white;
-    stroke: white;
-    stroke-width: 1px;
-    margin-right: 5px;
-    align-self: center;
-    cursor: pointer;
+    color: white; stroke: white; stroke-width: 1px;
+    margin-right: 5px; align-self: center; cursor: pointer;
   }
 
-  #star {
-    position: relative;
-    top: 4px;
-  }
-  
-  span {
-    font-weight: bold;
-    color: white;
-  }
+  #star { position: relative; top: 4px; }
 
-  table {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
+  span { font-weight: bold; color: white; }
 
-  img {
-    width: 100px;
-    height: auto;
-  }
+  table { width: 100%; margin-left: auto; margin-right: auto; text-align: center; }
 
-  th, td {
-    padding: 15px;
-  }
+  img { width: 100px; height: auto; }
 
-  tr {
-    border-bottom: 1px solid white;
-  }
+  th, td { padding: 15px; }
 
-  strong {
-    font-size: calc(1em + 5px); 
-  }
+  tr { border-bottom: 1px solid white; }
 
-  td:nth-child(3) {
-    font-size: calc(1em - 5px);
-    text-align: left;
-  }
+  strong { font-size: calc(1em + 5px); }
+
+  td:nth-child(3) { font-size: calc(1em - 5px); text-align: left; }
 
   th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) {
     width: calc(1em + 100px);
   }
-
 `;
 
 export default PlanToWatch;
