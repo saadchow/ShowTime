@@ -219,139 +219,142 @@ function AnimeItem() {
 }
 
 const AnimeItemStyled = styled.div`
-  padding: 80px 18rem;
-  background-color: black;
-  p {
-    color: black;
-  }
+  padding: 80px 4vw;
+  background-color: var(--bg);
+
+  p { color: var(--muted); }
 
   button {
-    margin: 1vmin;
-    padding: 1vmin;
-    color: black;
-    background-color: orange;
-    font-size: 2vmin;
-    text-decoration: none;
-    text-align: center;
-    border: 0.1vmin solid var(--tan-2);
-    border-radius: 0.5vmin;
+    margin: 0.6rem 0.6rem 0 0;
+    padding: 0.6rem 0.9rem;
+    color: #fff;
+    background-color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
     outline: none;
     cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
   }
+  button:hover { transform: translateY(-1px); opacity: 0.95; }
 
-  h1 {
+  h1{
     display: inline-block;
     font-size: 3rem;
     margin-bottom: 1.5rem;
-    cursor: pointer;
-    background: white;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: all 0.4s ease-in-out;
-    &:hover {
-      transform: skew(-3deg);
-    }
+    color: var(--text);
+    -webkit-text-fill-color: currentColor; /* neutralize old text mask */
+    transition: transform .2s ease;
   }
-  .title {
+  h1:hover{ transform: skew(-3deg); }
+
+  .title{
     display: inline-block;
-    margin: 3rem 0;
+    margin: 3rem 0 1rem;
     font-size: 2rem;
-    cursor: pointer;
+    color: var(--text);
   }
 
-  .description {
-    margin-top: 2rem;
-    color: #6c7983;
-    line-height: 1.7rem;
-    button {
-      background-color: transparent;
+  .description{
+    margin-top: 1.25rem;
+    line-height: 1.75rem;
+    button{
+      background: transparent;
+      color: var(--accent);
       border: none;
-      outline: none;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: white;
-      font-weight: 600;
+      padding: 0;
+      font-size: 1rem;
+      font-weight: 700;
     }
   }
 
-  .trailer-con {
+  .trailer-con{
     display: flex;
     justify-content: center;
     align-items: center;
-    iframe {
+    iframe{
       outline: none;
-      border: 5px solid #e5e7eb;
-      padding: 1.5rem;
-      border-radius: 10px;
-      background-color: #ffffff;
+      border: 1px solid var(--ring);
+      padding: 0.75rem;
+      border-radius: 12px;
+      background-color: var(--surface);
+      width: min(100%, 900px);
+      height: 506px; /* 16:9 of 900px width; the iframe's own size props can stay */
+      max-width: 100%;
     }
   }
 
-  .details {
-    background-color: #fff;
-    border-radius: 20px;
+  .details{
+    background-color: var(--surface);
+    border-radius: 16px;
     padding: 2rem;
-    border: 5px solid #e5e7eb;
+    border: 1px solid var(--ring);
 
-    .detail {
+    .detail{
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      img {
-        border-radius: 7px;
-      }
+      gap: 2rem;
+      img{ border-radius: 10px; width: 100%; height: auto; }
     }
-    .anime-details {
+    .anime-details{
       display: flex;
       flex-direction: column;
+      gap: .4rem;
 
-      p {
+      p{
         display: flex;
-        gap: 1rem;
-        margin-left: 1em;
+        gap: 0.75rem;
+        margin-left: 0.2rem;
+        color: var(--text);
       }
-      p span:first-child {
+      p span:first-child{
         font-weight: 600;
-        color: black;
+        color: var(--muted);
+        min-width: 4.5rem;
+        display: inline-block;
       }
     }
-
     .button-container {
       display: flex;
-      flex-direction: column;
-      margin-top: 3em;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1.25rem;
     }
   }
 
-  .characters {
+  .characters{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-gap: 2rem;
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 20px;
-    border: 5px solid #e5e7eb;
-    button {
-      align-self: flex-end;
-    }
-    .character {
-      padding: 0.4rem 0.6rem;
-      border-radius: 7px;
-      background-color: white;
-      transition: all 0.4s ease-in-out;
-      img {
-        width: 100%;
-      }
-      h4 {
-        padding: 0.5rem 0;
-        color: #454e56;
-      }
-      p {
-        color: orange;
-      }
-      &:hover {
-        transform: translateY(-5px);
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    background-color: var(--surface);
+    padding: 1.25rem;
+    border-radius: 16px;
+    border: 1px solid var(--ring);
+
+    button { align-self: center; }
+
+    .character{
+      padding: .5rem .6rem;
+      border-radius: 10px;
+      background-color: var(--surface);
+      outline: 1px solid var(--ring);
+      transition: transform .15s ease, box-shadow .15s ease;
+
+      img{ width: 100%; border-radius: 8px; }
+      h4{ padding: .5rem 0 .25rem; color: var(--text); }
+      p{ color: var(--accent); font-weight: 600; }
+
+      &:hover{
+        transform: translateY(-3px);
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
       }
     }
+  }
+
+  @media (max-width: 900px){
+    padding: 60px 5vw;
+    .detail{ grid-template-columns: 1fr; }
   }
 `;
 
