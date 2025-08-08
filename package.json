@@ -61,5 +61,19 @@
   },
   "engines": {
     "node": "20.x"
+
+  "name": "showtime-server",
+  "private": true,
+  "engines": { "node": "18.x" },
+  "scripts": {
+    "postinstall": "npm ci --prefix client && npm run build --prefix client",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^7.6.0",
+    "path": "^0.12.7"
   }
 }
