@@ -1,64 +1,60 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimeContext } from './AnimeContext';
 import styled from 'styled-components';
-import axios from 'axios';
+import { AnimeContext } from './AnimeContext';
+import { useClerk } from '@clerk/clerk-react';
+import api from '../../lib/api';
 
 const CurrentlyWatching = () => {
   const { setCompleted, currentlyWatching, setCurrentlyWatching, setNotification } = useContext(AnimeContext);
+  const { user } = useClerk();
 
   useEffect(() => {
-  axios.get(`${process.env.REACT_APP_API_URL}/api/anime/currentlywatching`)
-    .then(response => setCurrentlyWatching(response.data))
-    .catch(error => console.error("Error fetching anime: ", error));
-}, [setCurrentlyWatching]);
+    if (user?.id) api.defaults.headers.common['x-clerk-user-id'] = user.id;
+  }, [user]);
 
-  const removeFromCurrentlyWatching = (id) => {
-    axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${id}`)
-      .then(() => {
-        setCurrentlyWatching(current => current.filter(anime => anime.mal_id !== id));
-        setNotification(`Anime removed from "Currently Watching"`);
-      })
-      .catch(error => console.error("Error removing anime: ", error));
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get(`anime?list=currentlywatching`);
+        setCurrentlyWatching(Array.isArray(res.data) ? res.data : []);
+      } catch (e) {
+        console.error('Error fetching currently watching:', e);
+        setCurrentlyWatching([]);
+      }
+    })();
+  }, [setCurrentlyWatching]);
+
+  const removeFromCurrentlyWatching = async (mal_id) => {
+    try {
+      await api.delete(`anime/${mal_id}`);
+      setCurrentlyWatching((cur) => cur.filter((a) => a.mal_id !== mal_id));
+      setNotification('Anime removed from "Currently Watching"');
+    } catch (e) {
+      console.error('Error removing anime:', e);
+    }
   };
 
   const addToCompleted = async (anime) => {
-  try {
-    // Step 1: Delete from currently watching
-    await axios.delete(`${process.env.REACT_APP_API_URL}/api/anime/${anime.mal_id}`);
+    try {
+      // Move via PUT, no delete+repost
+      const res = await api.put(`anime/${anime.mal_id}`, { list: 'completed' });
+      const moved = res.data || { ...anime, list: 'completed' };
 
-    // Step 2: Create updated anime object
-    const updatedAnime = { ...anime, list: 'completed' };
+      setCompleted((cur) => [moved, ...cur]);
+      setCurrentlyWatching((cur) => cur.filter((a) => a.mal_id !== anime.mal_id));
+      setNotification('Anime moved to "Completed"');
+    } catch (e) {
+      console.error('Error moving anime:', e);
+    }
+  };
 
-    // Step 3: Add to completed
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime);
-
-    setCompleted(current => [...current, response.data]);
-    setCurrentlyWatching(current => current.filter(a => a.mal_id !== anime.mal_id));
-    setNotification(`Anime moved to "Completed"`);
-  } catch (error) {
-    console.error("Error moving anime: ", error);
-  }
-};
-
-
-  // Then, create a new anime object with the list value set to 'completed'
-  const updatedAnime = { ...anime, list: 'completed' };
-
-  // Finally, send a POST request to add the updated anime to the "Completed" list
-  axios.post(`${process.env.REACT_APP_API_URL}/api/anime`, updatedAnime)
-    .then(response => {
-      setCompleted(current => [...current, response.data]);
-      setNotification(`Anime moved to "Completed"`);
-    })
-    .catch(error => console.error("Error adding anime: ", error));
-};
-
+  const items = Array.isArray(currentlyWatching) ? currentlyWatching : [];
   return (
     <ListStyled>
       <div className='body'>
         <h1 style={{ textAlign: 'center' }}>Currently Watching</h1>
-        {currentlyWatching && currentlyWatching.length > 0 ? (
+        {items.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -70,40 +66,38 @@ const CurrentlyWatching = () => {
               </tr>
             </thead>
             <tbody>
-              {currentlyWatching && currentlyWatching.map((anime, index) => (
+              {items.map((anime, index) => (
                 <tr key={anime.mal_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/anime/${anime.mal_id}`}>
-                      <img src={anime.images && anime.images.jpg && anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
+                      <img
+                        src={anime.images?.jpg?.large_image_url}
+                        alt={anime.title_english || anime.title || 'Anime'}
+                      />
                     </Link>
                   </td>
-                   <td>
+                  <td>
                     <strong>{anime.title_english || anime.title}</strong><br/>
                     {anime.type} - {anime.episodes} episode(s)<br/>
-                    {anime.aired && anime.aired.string}<br/>
-                    <br/>
-                    {anime.synopsis.length > 100 
+                    {anime.aired?.string}<br/><br/>
+                    {(anime.synopsis || '').length > 300
                       ? <>
-                          {anime.synopsis.substring(0, 300)}...
+                          {(anime.synopsis || '').substring(0, 300)}…
                           <Link to={`/anime/${anime.mal_id}`}><span>Read More</span></Link>
                         </>
-                      : anime.synopsis
+                      : (anime.synopsis || '')
                     }
                   </td>
                   <td className="score">
-                     <i id="star" class="material-icons">star</i>{anime.score}
+                    <i id="star" className="material-icons">star</i>{anime.score}
                   </td>
-                   <td>
-                    <button onClick={() => addToCompleted(anime)}>
-                      <span title='Add to Completed'> 
-                      <i class="material-icons">check</i>
-                      </span>
+                  <td>
+                    <button onClick={() => addToCompleted(anime)} title="Add to Completed">
+                      <i className="material-icons">check</i>
                     </button>
-                    <button onClick={() => removeFromCurrentlyWatching(anime.mal_id)}>
-                      <span title='Delete'>
-                     <i class="material-icons">delete</i>
-                     </span>
+                    <button onClick={() => removeFromCurrentlyWatching(anime.mal_id)} title="Delete">
+                      <i className="material-icons">delete</i>
                     </button>
                   </td>
                 </tr>
@@ -120,80 +114,43 @@ const CurrentlyWatching = () => {
   );
 };
 
-
 const ListStyled = styled.div`
   display: flex;
   padding-top: 60px;
   background: black;
   color: white;
 
-  .body {
-    background: black;
-    width: 70%;
-    margin: auto;
-  }
+  .body { background: black; width: 70%; margin: auto; }
 
   button {
-    width: 30px; 
-    height: 30px; 
-    margin-right: 10px;
-    background: transparent;
-    border: none;
+    width: 30px; height: 30px; margin-right: 10px;
+    background: transparent; border: none;
   }
 
   .material-icons {
-    color: white;
-    stroke: white;
-    stroke-width: 1px;
-    margin-right: 5px;
-    align-self: center;
-    cursor: pointer;
+    color: white; stroke: white; stroke-width: 1px;
+    margin-right: 5px; align-self: center; cursor: pointer;
   }
 
-  #star {
-    position: relative;
-    top: 4px;
-  }
-  
-  span {
-    font-weight: bold;
-    color: white;
-  }
+  #star { position: relative; top: 4px; }
 
-  table {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
+  span { font-weight: bold; color: white; }
 
-  img {
-    width: 100px;
-    height: auto;
-  }
+  table { width: 100%; margin-left: auto; margin-right: auto; text-align: center; }
 
-  th, td {
-    padding: 15px;
-  }
+  img { width: 100px; height: auto; }
 
-  tr {
-    border-bottom: 1px solid white;
-  }
+  th, td { padding: 15px; }
 
-  strong {
-    font-size: calc(1em + 5px); 
-  }
+  tr { border-bottom: 1px solid white; }
 
-  td:nth-child(3) {
-    font-size: calc(1em - 5px);
-    text-align: left;
-  }
+  strong { font-size: calc(1em + 5px); }
+
+  td:nth-child(3) { font-size: calc(1em - 5px); text-align: left; }
 
   th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) {
     width: calc(1em + 100px);
   }
-
 `;
-
 
 export default CurrentlyWatching;
