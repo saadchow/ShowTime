@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-const mongoURI = process.env.REACT_APP_MONGODB_URI;
+const mongoURI = process.env.MONGODB_URI;
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, {
@@ -46,3 +46,4 @@ if (process.env.NODE_ENV === "production") {
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
+
