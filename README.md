@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-  <h1 align="center"><a href="https://show-time-a09774f7fe38.herokuapp.com/">ShowTime</a></h1>
+  <h1 align="center"><a href="https://showtime-blsi.onrender.com/">ShowTime</a></h1>
   <p align="center">
     Your personal show tracker!
   </p>
@@ -54,7 +54,7 @@ ShowTime was built using the following technologies:
 
 ### Getting Started 🌱
 
-To get started with ShowTime, visit [the deployed app](https://show-time-a09774f7fe38.herokuapp.com/). You can log in and start tracking your favorite shows in no time!
+To get started with ShowTime, visit [the deployed app](https://showtime-blsi.onrender.com/). You can log in and start tracking your favorite shows in no time!
 
 Here is the [Trello Board](https://trello.com/b/e8SpOaI8/show-tracker) to view the development process!
 
