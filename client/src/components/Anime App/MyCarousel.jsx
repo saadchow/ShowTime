@@ -94,7 +94,6 @@ const MyCarousel = () => {
 };
 
 const CarouselWrapper = styled.div`
-  /* overall area */
   .carousel {
     width: 100%;
     height: 55vh;
@@ -103,138 +102,91 @@ const CarouselWrapper = styled.div`
     background: var(--bg);
   }
 
-  /* use accent color for active dot */
+  /* active dot uses accent */
   .control-dots .dot.selected {
-    height: 10px;
-    width: 45px;
-    border-radius: 10px;
-    background: var(--accent);
-    border: none;
+    height: 10px; width: 45px; border-radius: 10px;
+    background: var(--accent); border: none;
   }
 
-  .slide-wrap {
-    position: relative;
-    height: 55vh;
+  /* Make prev/next arrows visible on light bg */
+  .control-arrow {
+    opacity: 1 !important;
+    background: rgba(15, 23, 42, 0.20) !important; /* slate-900 @ 20% */
+    width: 44px; height: 44px; border-radius: 9999px;
+    top: calc(50% - 22px);
   }
+  .control-arrow:hover {
+    background: rgba(15, 23, 42, 0.35) !important;
+  }
+  .control-prev.control-arrow:before {
+    border-right-color: #fff !important;
+  }
+  .control-next.control-arrow:before {
+    border-left-color: #fff !important;
+  }
+
+  .slide-wrap { position: relative; height: 55vh; }
 
   strong {
     color: var(--text);
-    display: block;
-    margin-top: 8%;
-    font-size: 2.3em;
-    margin-bottom: 0.1em;
+    display: block; margin-top: 8%;
+    font-size: 2.3em; margin-bottom: 0.1em;
   }
 
   .text-container {
     color: var(--text);
-    height: 45vh;
-    position: absolute;
-    left: 0;
-    width: 47%;
-    z-index: 2;
-    float: left;
-    margin-left: 2%;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    height: 45vh; position: absolute; left: 0; width: 47%;
+    z-index: 2; margin-left: 2%;
+    text-align: left; display: flex; flex-direction: column; justify-content: center;
+    /* ensure contrast on light images */
+    background: linear-gradient(90deg, rgba(248,250,252,0.92), rgba(248,250,252,0));
+    padding: 1rem 1.5rem; border-radius: 12px;
   }
 
-  p {
-    color: var(--muted);
-    margin-bottom: 1.2em;
-    font-size: 0.9em;
-  }
+  p { color: var(--muted); margin-bottom: 1.2em; font-size: 0.9em; }
 
   h4 {
-    text-decoration: none;
-    font-size: 0.95em;
-    font-weight: normal;
-    text-align: justify;
-    color: var(--muted);
-    max-width: 90%;
+    text-decoration: none; font-size: 0.95em; font-weight: normal;
+    text-align: justify; color: var(--muted); max-width: 90%;
   }
 
   .button-container {
-    position: absolute;
-    bottom: 20px;
-    display: flex;
-    align-items: center;
+    position: absolute; bottom: 20px; display: flex; align-items: center;
   }
 
-  .continue-button, .bookmark-button {
-    transition: all 0.25s ease;
-  }
+  .continue-button, .bookmark-button { transition: all 0.25s ease; }
 
   .continue-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 10px 50px;
-    font-size: 18px;
-    cursor: pointer;
-    border-radius: 10px;
-    margin-right: 12px;
+    display: inline-flex; justify-content: center; align-items: center;
+    background-color: var(--accent); color: #fff; border: none;
+    padding: 10px 50px; font-size: 18px; cursor: pointer;
+    border-radius: 10px; margin-right: 12px;
     box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
   }
-  .continue-button:hover {
-    transform: translateY(-1px);
-    opacity: 0.95;
-  }
+  .continue-button:hover { transform: translateY(-1px); opacity: 0.95; }
 
   .bookmark-button {
-    box-sizing: border-box;
-    width: 42px;
-    height: 45px;
+    box-sizing: border-box; width: 42px; height: 45px;
     border: 2px solid var(--accent);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
+    display: inline-flex; justify-content: center; align-items: center;
+    border-radius: 10px; background: var(--surface);
   }
-  .bookmark-button:hover {
-    transform: translateY(-1px);
-    opacity: 0.95;
-  }
-  .bookmark-button i {
-    color: var(--accent);
-  }
+  .bookmark-button:hover { transform: translateY(-1px); opacity: 0.95; }
+  .bookmark-button i { color: var(--accent); }
 
   .image-container {
-    /* Prevent upscaling beyond ~900px to avoid blur on huge screens */
-    width: min(55%, 900px);
-    height: 45vh;
-    position: absolute;
-    right: 0;
-    z-index: 1;
-    float: right;
-    margin-right: 2%;
+    width: min(55%, 900px); height: 45vh; position: absolute; right: 0;
+    z-index: 1; margin-right: 2%;
   }
-
   .image-container::after {
-    /* Light theme gradient overlay from bg to transparent */
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, var(--bg), transparent);
+    content: ""; position: absolute; inset: 0;
+    /* soften right side; keep text area readable */
+    background: linear-gradient(to right, rgba(248,250,252,0.9), rgba(248,250,252,0));
     pointer-events: none;
   }
 
-  picture, img {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  img {
-    object-fit: cover;
-    border-radius: 18px;
-    /* Slightly better scaling on some browsers */
-    image-rendering: optimizeQuality;
-  }
+  picture, img { width: 100%; height: 100%; display: block; }
+  img { object-fit: cover; border-radius: 18px; image-rendering: optimizeQuality; }
 
   @media (max-width: 900px) {
     .text-container { width: 55%; }
@@ -244,21 +196,10 @@ const CarouselWrapper = styled.div`
 
   @media (max-width: 700px) {
     .text-container {
-      width: 100%;
-      position: relative;
-      height: auto;
-      margin: 0;
-      padding: 1rem 2rem;
-      background: var(--surface);
-      border: 1px solid var(--ring);
-      border-radius: 12px;
+      width: 100%; position: relative; height: auto; margin: 0; padding: 1rem 2rem;
+      background: var(--surface); border: 1px solid var(--ring); border-radius: 12px;
     }
-    .image-container {
-      position: relative;
-      width: 100%;
-      height: 32vh;
-      margin: 12px 0 0;
-    }
+    .image-container { position: relative; width: 100%; height: 32vh; margin: 12px 0 0; }
   }
 `;
 
