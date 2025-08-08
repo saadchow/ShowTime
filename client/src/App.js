@@ -10,6 +10,7 @@ import Completed from "./components/Anime App/Completed";
 import PlanToWatch from "./components/Anime App/PlanToWatch";
 import Notification from './components/Anime App/Notification';
 import LandingPage from "./components/Anime App/LandingPage";
+import SearchResults from './components/Anime App/SearchResults';
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -34,6 +35,7 @@ function App() {
                   <Route path='/plan-to-watch' element={<PlanToWatch />} />
                   <Route path="/currently-watching" element={<CurrentlyWatching />} />
                   <Route path="/completed" element={<Completed />} />
+                  <Route path="/search" element={<SearchResults />} />
                   <Route path="/landing" element={<LandingPage />} />
                 </Routes>
               <NotificationWrapper />
