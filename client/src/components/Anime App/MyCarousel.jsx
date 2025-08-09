@@ -8,200 +8,228 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 const MyCarousel = () => {
   const { airingAnime } = useGlobalContext();
 
-  const getBestImage = (anime) => {
-    // Prefer high quality webp, then jpg (large), then normal
-    const w = anime?.images?.webp;
-    const j = anime?.images?.jpg;
-    return (
-      w?.large_image_url ||
-      w?.image_url ||
-      j?.large_image_url ||
-      j?.image_url ||
-      ''
-    );
-  };
+  const bestImage = (a) =>
+    a?.images?.webp?.large_image_url ||
+    a?.images?.webp?.image_url ||
+    a?.images?.jpg?.large_image_url ||
+    a?.images?.jpg?.image_url ||
+    '';
+
+  const short = (str, n) => (str && str.length > n ? str.slice(0, n).trim() + '…' : str || '');
 
   return (
-    <CarouselWrapper>
+    <HeroCarousel>
       <Carousel
         showThumbs={false}
         showStatus={false}
         showIndicators={true}
         autoPlay={true}
-        interval={4000}
+        interval={5000}
         infiniteLoop={true}
         swipeable
         emulateTouch
       >
-        {airingAnime && airingAnime.slice(0, 5).map((anime) => {
-          const bestSrc = getBestImage(anime);
-          const title = anime.title_english || anime.title;
+        {Array.isArray(airingAnime) &&
+          airingAnime.slice(0, 6).map((anime, idx) => {
+            const title = anime.title_english || anime.title;
+            const genres = (anime.genres || []).map(g => g.name).join(', ');
+            const img = bestImage(anime);
 
-          return (
-            <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
-              <div className="slide-wrap">
-                <div className="text-container">
-                  <strong>{title}</strong>
-                  <p>
-                    {anime.title_english ? "Sub | Dub" : "Sub"} &nbsp; • &nbsp;
-                    {(anime.genres || []).map(g => g.name).join(', ')}
-                  </p>
-                  <h4>
-                    {(anime.synopsis || '').length > 400
-                      ? `${anime.synopsis.substring(0, 400)}...`
-                      : (anime.synopsis || '')
-                    }
-                  </h4>
-
-                  <div className="button-container">
-                    <button className="continue-button">
-                      More Info.
-                      <i className="material-symbols-outlined">chevron_right</i>
-                    </button>
-                    <div className="bookmark-button">
-                      <i className="material-icons">bookmark_border</i>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="image-container">
-                  {/* Prefer WebP with fallback to JPG */}
+            return (
+              <div className="slide" key={anime.mal_id}>
+                {/* Background art */}
+                <div className="bg">
                   <picture>
                     {anime?.images?.webp && (
                       <source
-                        srcSet={
-                          anime.images.webp.large_image_url ||
-                          anime.images.webp.image_url
-                        }
+                        srcSet={anime.images.webp.large_image_url || anime.images.webp.image_url}
                         type="image/webp"
                       />
                     )}
-                    <img
-                      src={bestSrc}
-                      alt={title}
-                      loading="eager"
-                      decoding="async"
-                    />
+                    <img src={img} alt={title} loading="eager" decoding="async" />
                   </picture>
                 </div>
+
+                {/* Gradient that fades art to the left for readable text */}
+                <div className="fade" />
+
+                {/* Text overlay */}
+                <div className="content">
+                  <div className="kicker">#{idx + 1} Spotlight</div>
+                  <h2 className="title">{title}</h2>
+
+                  <div className="meta">
+                    <span>Sub{anime.title_english ? ' | Dub' : ''}</span>
+                    {genres && <span>• {genres}</span>}
+                  </div>
+
+                  <p className="desc">{short(anime.synopsis, 320)}</p>
+
+                  <div className="cta">
+                    <Link to={`/anime/${anime.mal_id}`} className="btn primary">
+                      More Info.
+                      <i className="material-symbols-outlined">chevron_right</i>
+                    </Link>
+                    <Link to={`/anime/${anime.mal_id}`} className="btn ghost">
+                      Detail
+                      <i className="material-symbols-outlined">chevron_right</i>
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </Link>
-          );
-        })}
+            );
+          })}
       </Carousel>
-    </CarouselWrapper>
+    </HeroCarousel>
   );
 };
 
-const CarouselWrapper = styled.div`
+const HeroCarousel = styled.div`
+  /* Overall size of the hero area */
   .carousel {
     width: 100%;
-    height: 55vh;
-    overflow: hidden;
-    display: flex;
+    height: 62vh;
+    min-height: 420px;
+    max-height: 720px;
     background: var(--bg);
+    border-radius: 18px;
+    overflow: hidden;
   }
 
-  /* Dots — make all visible with a dark outline */
-  .control-dots {
-    bottom: 14px; /* adjust if you want them lower/higher */
+  /* Each slide becomes a hero */
+  .slide {
+    position: relative;
+    height: 62vh;
+    min-height: 420px;
+    max-height: 720px;
   }
-  .control-dots .dot {
-    width: 10px;
-    height: 10px;
+
+  /* Background art covers the right & center */
+  .bg, .bg picture, .bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .bg img {
+    object-fit: cover;
+    image-rendering: optimizeQuality;
+    transform: translateZ(0);
+  }
+
+  /* Fade the art into the left side so text sits on top cleanly.
+     Using light theme colors (Option D). Adjust stops to taste. */
+  .fade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg,
+        rgba(248,250,252,0.96) 0%,
+        rgba(248,250,252,0.92) 20%,
+        rgba(248,250,252,0.70) 38%,
+        rgba(248,250,252,0.30) 58%,
+        rgba(248,250,252,0.10) 72%,
+        rgba(248,250,252,0.00) 86%);
+  }
+
+  /* Text overlay */
+  .content {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    gap: 14px;
+    padding: clamp(16px, 3.5vw, 40px);
+    width: min(950px, 60vw);
+    color: var(--text);
+    z-index: 2;
+  }
+
+  .kicker {
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .4px;
+  }
+
+  .title {
+    font-size: clamp(1.6rem, 4.2vw, 3.2rem);
+    margin: 0;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .meta {
+    display: flex;
+    gap: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .desc {
+    color: var(--muted);
+    max-width: 60ch;
+    line-height: 1.6;
+  }
+
+  .cta {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 18px;
     border-radius: 9999px;
-    background: #fff !important;      /* white fill for contrast */
-    border: 2px solid var(--text);     /* dark outline */
-    opacity: 1 !important;             /* never faded */
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(99,102,241,.25);
+  }
+  .btn.ghost {
+    background: rgba(15,23,42,.08);
+    color: var(--text);
+  }
+  .btn:hover { transform: translateY(-1px); opacity: .96; }
+
+ /* Dots: visible with outline and accent for selected */
+  .control-dots { bottom: 14px; }
+  .control-dots .dot {
+    width: 10px; height: 10px; border-radius: 9999px;
+    background: #fff !important;
+    border: 2px solid var(--text);
+    opacity: 1 !important;
     box-shadow: 0 0 0 1px rgba(0,0,0,.05);
   }
-  /* Selected dot becomes a pill in your accent color */
   .control-dots .dot.selected {
-    width: 45px;
-    border-radius: 10px;
-    background: var(--accent) !important;
-    border-color: var(--accent);
+    width: 45px; border-radius: 10px;
+    background: var(--accent) !important; border-color: var(--accent);
   }
 
-  /* Arrows — center vertically for real */
+  /* Arrows: centered vertically and readable */
   .control-arrow {
     top: 50% !important;
     transform: translateY(-50%) !important;
     opacity: 1 !important;
-    background: rgba(15, 23, 42, 0.20) !important; /* slate-900 @ 20% */
+    background: rgba(15,23,42,.25) !important;
     width: 44px; height: 44px; border-radius: 9999px;
   }
-  .control-arrow:hover {
-    background: rgba(15, 23, 42, 0.35) !important;
-  }
+  .control-arrow:hover { background: rgba(15,23,42,.38) !important; }
   .control-prev.control-arrow:before { border-right-color: #fff !important; }
   .control-next.control-arrow:before { border-left-color: #fff !important; }
 
-  .slide-wrap { position: relative; height: 55vh; }
-
-  strong {
-    color: var(--text);
-    display: block; margin-top: 8%;
-    font-size: 2.3em; margin-bottom: 0.1em;
-  }
-
-  .text-container {
-    color: var(--text);
-    height: 45vh; position: absolute; left: 0; width: 47%;
-    z-index: 2; margin-left: 2%;
-    text-align: left; display: flex; flex-direction: column; justify-content: center;
-    background: linear-gradient(90deg, rgba(248,250,252,0.92), rgba(248,250,252,0));
-    padding: 1rem 1.5rem; border-radius: 12px;
-  }
-
-  p { color: var(--muted); margin-bottom: 1.2em; font-size: 0.9em; }
-  h4 { text-decoration: none; font-size: 0.95em; font-weight: normal; text-align: justify; color: var(--muted); max-width: 90%; }
-
-  .button-container { position: absolute; bottom: 20px; display: flex; align-items: center; }
-  .continue-button, .bookmark-button { transition: all 0.25s ease; }
-  .continue-button {
-    display: inline-flex; justify-content: center; align-items: center;
-    background-color: var(--accent); color: #fff; border: none;
-    padding: 10px 50px; font-size: 18px; cursor: pointer;
-    border-radius: 10px; margin-right: 12px;
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
-  }
-  .continue-button:hover { transform: translateY(-1px); opacity: 0.95; }
-  .bookmark-button {
-    box-sizing: border-box; width: 42px; height: 45px;
-    border: 2px solid var(--accent);
-    display: inline-flex; justify-content: center; align-items: center;
-    border-radius: 10px; background: var(--surface);
-  }
-  .bookmark-button:hover { transform: translateY(-1px); opacity: 0.95; }
-  .bookmark-button i { color: var(--accent); }
-
-  .image-container {
-    width: min(55%, 900px); height: 45vh; position: absolute; right: 0;
-    z-index: 1; margin-right: 2%;
-  }
-  .image-container::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(to right, rgba(248,250,252,0.9), rgba(248,250,252,0));
-    pointer-events: none;
-  }
-
-  picture, img { width: 100%; height: 100%; display: block; }
-  img { object-fit: cover; border-radius: 18px; image-rendering: optimizeQuality; }
-
   @media (max-width: 900px) {
-    .text-container { width: 55%; }
-    .image-container { width: 45%; }
-    strong { font-size: 1.8em; }
-  }
-  @media (max-width: 700px) {
-    .text-container {
-      width: 100%; position: relative; height: auto; margin: 0; padding: 1rem 2rem;
-      background: var(--surface); border: 1px solid var(--ring); border-radius: 12px;
-    }
-    .image-container { position: relative; width: 100%; height: 32vh; margin: 12px 0 0; }
+    .content { width: auto; }
+    .desc { max-width: 100%; }
   }
 `;
-
 
 export default MyCarousel;
