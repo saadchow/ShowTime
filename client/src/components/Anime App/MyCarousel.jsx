@@ -102,28 +102,40 @@ const CarouselWrapper = styled.div`
     background: var(--bg);
   }
 
-  /* active dot uses accent */
+  /* Dots — make all visible with a dark outline */
+  .control-dots {
+    bottom: 14px; /* adjust if you want them lower/higher */
+  }
+  .control-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: #fff !important;      /* white fill for contrast */
+    border: 2px solid var(--text);     /* dark outline */
+    opacity: 1 !important;             /* never faded */
+    box-shadow: 0 0 0 1px rgba(0,0,0,.05);
+  }
+  /* Selected dot becomes a pill in your accent color */
   .control-dots .dot.selected {
-    height: 10px; width: 45px; border-radius: 10px;
-    background: var(--accent); border: none;
+    width: 45px;
+    border-radius: 10px;
+    background: var(--accent) !important;
+    border-color: var(--accent);
   }
 
-  /* Make prev/next arrows visible on light bg */
+  /* Arrows — center vertically for real */
   .control-arrow {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     opacity: 1 !important;
     background: rgba(15, 23, 42, 0.20) !important; /* slate-900 @ 20% */
     width: 44px; height: 44px; border-radius: 9999px;
-    top: calc(50% - 22px);
   }
   .control-arrow:hover {
     background: rgba(15, 23, 42, 0.35) !important;
   }
-  .control-prev.control-arrow:before {
-    border-right-color: #fff !important;
-  }
-  .control-next.control-arrow:before {
-    border-left-color: #fff !important;
-  }
+  .control-prev.control-arrow:before { border-right-color: #fff !important; }
+  .control-next.control-arrow:before { border-left-color: #fff !important; }
 
   .slide-wrap { position: relative; height: 55vh; }
 
@@ -138,24 +150,15 @@ const CarouselWrapper = styled.div`
     height: 45vh; position: absolute; left: 0; width: 47%;
     z-index: 2; margin-left: 2%;
     text-align: left; display: flex; flex-direction: column; justify-content: center;
-    /* ensure contrast on light images */
     background: linear-gradient(90deg, rgba(248,250,252,0.92), rgba(248,250,252,0));
     padding: 1rem 1.5rem; border-radius: 12px;
   }
 
   p { color: var(--muted); margin-bottom: 1.2em; font-size: 0.9em; }
+  h4 { text-decoration: none; font-size: 0.95em; font-weight: normal; text-align: justify; color: var(--muted); max-width: 90%; }
 
-  h4 {
-    text-decoration: none; font-size: 0.95em; font-weight: normal;
-    text-align: justify; color: var(--muted); max-width: 90%;
-  }
-
-  .button-container {
-    position: absolute; bottom: 20px; display: flex; align-items: center;
-  }
-
+  .button-container { position: absolute; bottom: 20px; display: flex; align-items: center; }
   .continue-button, .bookmark-button { transition: all 0.25s ease; }
-
   .continue-button {
     display: inline-flex; justify-content: center; align-items: center;
     background-color: var(--accent); color: #fff; border: none;
@@ -164,7 +167,6 @@ const CarouselWrapper = styled.div`
     box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
   }
   .continue-button:hover { transform: translateY(-1px); opacity: 0.95; }
-
   .bookmark-button {
     box-sizing: border-box; width: 42px; height: 45px;
     border: 2px solid var(--accent);
@@ -180,7 +182,6 @@ const CarouselWrapper = styled.div`
   }
   .image-container::after {
     content: ""; position: absolute; inset: 0;
-    /* soften right side; keep text area readable */
     background: linear-gradient(to right, rgba(248,250,252,0.9), rgba(248,250,252,0));
     pointer-events: none;
   }
@@ -193,7 +194,6 @@ const CarouselWrapper = styled.div`
     .image-container { width: 45%; }
     strong { font-size: 1.8em; }
   }
-
   @media (max-width: 700px) {
     .text-container {
       width: 100%; position: relative; height: auto; margin: 0; padding: 1rem 2rem;
@@ -202,5 +202,6 @@ const CarouselWrapper = styled.div`
     .image-container { position: relative; width: 100%; height: 32vh; margin: 12px 0 0; }
   }
 `;
+
 
 export default MyCarousel;
