@@ -4,19 +4,28 @@ import { useGlobalContext } from '../../context/global';
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
 
-function Airing({ rendered }) {
+function Airing({ rendered, setRendered }) {
   const { airingAnime, isSearch, searchResults } = useGlobalContext();
   const list = (!isSearch && rendered === 'airing') ? airingAnime : searchResults;
 
+  const bestImg = (a) =>
+    a?.images?.webp?.large_image_url ||
+    a?.images?.webp?.image_url ||
+    a?.images?.jpg?.large_image_url ||
+    a?.images?.jpg?.image_url ||
+    '';
+
   return (
     <PageWrap>
-      <Sidebar />
+      {/* ✅ pass BOTH props so sidebar buttons work */}
+      <Sidebar rendered={rendered} setRendered={setRendered} />
+
       <main className="content">
         <h1>Currently Airing</h1>
         <div className="grid">
-          {Array.isArray(list) && list.map(anime => (
+          {Array.isArray(list) && list.map((anime) => (
             <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id} className="card">
-              <img src={anime.images?.jpg?.large_image_url} alt={anime.title_english || anime.title} />
+              <img src={bestImg(anime)} alt={anime.title_english || anime.title} />
               <p className="title">{anime.title_english || anime.title}</p>
             </Link>
           ))}
@@ -33,6 +42,13 @@ const PageWrap = styled.div`
   padding: 80px 4vw 40px;
   background: var(--bg);
   color: var(--text);
+
+  .content {
+    background: var(--surface);
+    border: 1px solid var(--ring);
+    border-radius: 12px;
+    padding: 12px;
+  }
 
   .content h1 { margin: 4px 0 12px; }
 
