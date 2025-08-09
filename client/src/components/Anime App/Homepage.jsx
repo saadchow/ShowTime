@@ -24,13 +24,13 @@ function Homepage({ rendered, setRendered }) {
   const switchComponent = () => {
     switch (rendered) {
       case 'popular':
-        return <Popular rendered={rendered} />;
+        return <Popular rendered={rendered} setRendered={setRendered} />
       case 'airing':
-        return <Airing rendered={rendered} />;
+        return <Airing rendered={rendered} setRendered={setRendered} />
       case 'upcoming':
-        return <Upcoming rendered={rendered} />;
+        return <Upcoming rendered={rendered} setRendered={setRendered} />
       default:
-        return <Airing rendered={rendered} />;
+        return <Airing rendered={rendered} setRendered={setRendered} />
     }
   };
 
