@@ -1,59 +1,53 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import styled from 'styled-components'
-import { useGlobalContext } from '../../context/global';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
+const Sidebar = () => {
+  return (
+    <SidebarStyled>
+      <h3>Browse</h3>
+      <nav className="menu">
+        <NavLink to="/popular" className={({isActive}) => isActive ? 'item active' : 'item'}>Most Popular</NavLink>
+        <NavLink to="/airing" className={({isActive}) => isActive ? 'item active' : 'item'}>Currently Airing</NavLink>
+        <NavLink to="/upcoming" className={({isActive}) => isActive ? 'item active' : 'item'}>Upcoming</NavLink>
+      </nav>
+    </SidebarStyled>
+  );
+};
 
-function Sidebar() {
-    const {popularAnime} = useGlobalContext()
+const SidebarStyled = styled.aside`
+  position: sticky;
+  top: 72px;
+  height: fit-content;
+  background: var(--surface);
+  border: 1px solid var(--ring);
+  border-radius: 12px;
+  padding: 14px;
+  color: var(--text);
 
-    const sorted = popularAnime && popularAnime.sort((a,b) => {
-        return b.score - a.score
-    })
+  h3 { margin: 4px 8px 10px; font-size: 1rem; color: var(--muted); }
 
-    return (
-        <SidebarStyled>
-            <h3>Top Anime</h3>
-            <div className="anime">
-                {(sorted && sorted.slice(0, 5)) && (sorted.slice(0, 5)).map(function (anime) {
-                    return <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
-                        <img src={anime.images.jpg.large_image_url} alt="" />
-                        <h5>
-                            {anime.title_english || anime.title}
-                        </h5>
-                    </Link>
-                })}
-            </div>
-        </SidebarStyled>
-    )
-}
+  .menu { display: grid; gap: 8px; }
+  .item {
+    display: block;
+    padding: 10px 12px;
+    background: var(--surface);
+    border: 1px solid var(--ring);
+    border-radius: 10px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .item:hover { background: #f8fafc; }
+  .active {
+    background: var(--accent);
+    color: #fff !important;
+    border-color: var(--accent);
+  }
 
-const SidebarStyled = styled.div`
-    margin-top: 2rem;
-    background-color: black;
-    padding-right: 2rem;
-    padding-left: 2rem;
-    padding-top: 2rem;
-    .anime{
-        display: flex;
-        flex-direction: column;
-        width: 150px;
-        img{
-            width: 100%;
-            border-radius: 5px;
-            border: 1px solid #D3D3D3;
-        }
-        a{
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: .4rem;
-            color: white;
-            h4{
-                font-size: 1.1rem;
-            }
-        }
-    }
+  @media (max-width: 900px) {
+    position: static;
+    order: -1;
+  }
 `;
 
-export default Sidebar
+export default Sidebar;
