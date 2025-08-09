@@ -1,105 +1,76 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useGlobalContext } from '../../context/global'
-import styled from 'styled-components'
-import Sidebar from './Sidebar'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useGlobalContext } from '../../context/global';
+import styled from 'styled-components';
+import Sidebar from './Sidebar';
 
-function Popular({rendered}) {
-    const {popularAnime,isSearch, searchResults} = useGlobalContext()
+function Popular({ rendered }) {
+  const { popularAnime, isSearch, searchResults } = useGlobalContext();
+  const list = (!isSearch && rendered === 'popular') ? popularAnime : searchResults;
 
-    const conditionalRender = () => {
-   if(!isSearch && rendered === 'popular'){
-  return popularAnime && popularAnime.slice(0, 20).map((anime) => {
-    return (
-      <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
-        <img src={anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
-        <p>{anime.title_english || anime.title}</p>
-      </Link>
-    );
-  });
-    }else{
-        return searchResults.map((anime) => {
-            return <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
-                <img src={anime.images.jpg.large_image_url} alt={anime.title_english || anime.title} />
-                <p>{anime.title_english || anime.title}</p>
+  return (
+    <PageWrap>
+      <Sidebar />
+      <main className="content">
+        <h1>Most Popular</h1>
+        <div className="grid">
+          {Array.isArray(list) && list.map(anime => (
+            <Link to={`/anime/${anime.mal_id}`} key={anime.mal_id} className="card">
+              <img src={anime.images?.jpg?.large_image_url} alt={anime.title_english || anime.title} />
+              <p className="title">{anime.title_english || anime.title}</p>
             </Link>
-        })
-    }
+          ))}
+        </div>
+      </main>
+    </PageWrap>
+  );
 }
 
-
-    return (
-        <PopularStyled>
-            <Sidebar />
-            <div className="popular-anime">
-                {conditionalRender()}
-            </div>
-        </PopularStyled>
-    )
-}
-
-const PopularStyled = styled.div`
-
-  display: flex;
-  padding-top: 60px;
+const PageWrap = styled.div`
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+  padding: 80px 4vw 40px;
   background: var(--bg);
   color: var(--text);
 
-  .body {
-    background: var(--bg);
-    width: min(1100px, 90%);
-    margin: auto;
+  .content h1 { margin: 4px 0 12px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
   }
 
-  h1 { text-align: center; margin-bottom: 12px; }
-
-  table {
-    width: 100%;
-    text-align: center;
+  .card {
+    display: block;
     background: var(--surface);
     border: 1px solid var(--ring);
     border-radius: 12px;
     overflow: hidden;
-    margin-top: 18px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(15,23,42,.08);
   }
 
-  thead th {
-    background: #f1f5f9; /* slate-100 */
+  .card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .title {
+    padding: 10px 12px;
+    font-size: .95rem;
     color: var(--text);
   }
 
-  img { width: 100px; height: auto; border-radius: 8px; }
-
-  th, td { padding: 16px; vertical-align: top; }
-
-  tr { border-bottom: 1px solid var(--ring); }
-  tr:last-child { border-bottom: none; }
-
-  strong { color: var(--text); }
-
-  td:nth-child(3) {
-    font-size: 0.95rem;
-    text-align: left;
-    color: var(--muted);
+  @media (max-width: 900px){
+    grid-template-columns: 1fr;
   }
-
-  .material-icons {
-    color: var(--accent);
-    margin-right: 5px;
-    align-self: center;
-    vertical-align: middle;
-  }
-
-  #star { position: relative; top: 4px; color: var(--accent); }
-
-  .actions button {
-    width: 34px; height: 34px; margin-right: 8px;
-    background: transparent; border: none; cursor: pointer;
-  }
-
-  span { font-weight: 600; color: var(--accent); }
 `;
 
-
-
-export default Popular
+export default Popular;
