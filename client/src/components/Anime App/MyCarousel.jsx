@@ -55,7 +55,7 @@ const MyCarousel = () => {
 
                 {/* Text overlay */}
                 <div className="content">
-                  <div className="kicker">#{idx + 1} Spotlight</div>
+                  <div className="kicker">#{idx + 1} Trending</div>
                   <h2 className="title">{title}</h2>
 
                   <div className="meta">
@@ -85,7 +85,24 @@ const MyCarousel = () => {
 };
 
 const HeroCarousel = styled.div`
-  /* Overall size of the hero area */
+
+.carousel .slide {
+  text-align: left !important;
+}
+
+.content {
+  justify-items: start;   /* grid items left */
+  text-align: left;       /* text left */
+}
+
+.content .kicker,
+.content .title,
+.content .meta,
+.content .desc,
+.content .cta {
+  text-align: left;
+}
+
   .carousel {
     width: 100%;
     height: 62vh;
@@ -96,7 +113,7 @@ const HeroCarousel = styled.div`
     overflow: hidden;
   }
 
-  /* Each slide becomes a hero */
+ 
   .slide {
     position: relative;
     height: 62vh;
@@ -104,7 +121,7 @@ const HeroCarousel = styled.div`
     max-height: 720px;
   }
 
-  /* Background art covers the right & center */
+
   .bg, .bg picture, .bg img {
     position: absolute;
     inset: 0;
@@ -117,9 +134,6 @@ const HeroCarousel = styled.div`
     image-rendering: optimizeQuality;
     transform: translateZ(0);
   }
-
-  /* Fade the art into the left side so text sits on top cleanly.
-     Using light theme colors (Option D). Adjust stops to taste. */
   .fade {
     position: absolute;
     inset: 0;
@@ -134,7 +148,6 @@ const HeroCarousel = styled.div`
         rgba(248,250,252,0.00) 86%);
   }
 
-  /* Text overlay */
   .content {
     position: absolute;
     inset: 0;
@@ -200,7 +213,6 @@ const HeroCarousel = styled.div`
   }
   .btn:hover { transform: translateY(-1px); opacity: .96; }
 
- /* Dots: visible with outline and accent for selected */
   .control-dots { bottom: 14px; }
   .control-dots .dot {
     width: 10px; height: 10px; border-radius: 9999px;
@@ -214,7 +226,6 @@ const HeroCarousel = styled.div`
     background: var(--accent) !important; border-color: var(--accent);
   }
 
-  /* Arrows: centered vertically and readable */
   .control-arrow {
     top: 50% !important;
     transform: translateY(-50%) !important;
