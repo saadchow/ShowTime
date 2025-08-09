@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { useGlobalContext } from '../../context/global'
-import Popular from './Popular'
-import styled from 'styled-components'
-import Upcoming from './Upcoming'
-import Airing from './Airing'
+import { useGlobalContext } from '../../context/global';
+import Popular from './Popular';
+import styled from 'styled-components';
+import Upcoming from './Upcoming';
+import Airing from './Airing';
 import MyCarousel from './MyCarousel';
 
 function Homepage({ rendered, setRendered }) {
-
   const {
     getUpcomingAnime,
     getAiringAnime,
     setIsSearch,
     dispatch
-  } = useGlobalContext()
+  } = useGlobalContext();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -23,94 +22,204 @@ function Homepage({ rendered, setRendered }) {
   };
 
   const switchComponent = () => {
-    switch(rendered){
+    switch (rendered) {
       case 'popular':
-        return <Popular rendered={rendered} />
+        return <Popular rendered={rendered} />;
       case 'airing':
-        return <Airing rendered={rendered} />
+        return <Airing rendered={rendered} />;
       case 'upcoming':
-        return <Upcoming rendered={rendered} />
+        return <Upcoming rendered={rendered} />;
       default:
-        return <Airing rendered={rendered} />
+        return <Airing rendered={rendered} />;
     }
-  }
+  };
 
   return (
     <HomepageStyled>
       <MyCarousel />
+
       <header>
-        <div className="logo">
-          <h1>
-            {rendered === 'popular' ? 'Most Popular Anime' : 
-            rendered === 'airing' ? 'Currently Airing Anime' : 'Upcoming Anime'}
-          </h1>
-        </div>
-        <div className="search-container">
-          <div className="filter-btn browse-filter">
-            <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+        <div className="container">
+          <div className="logo">
+            <h1>
+              {rendered === 'popular'
+                ? 'Most Popular Anime'
+                : rendered === 'airing'
+                ? 'Currently Airing Anime'
+                : 'Upcoming Anime'}
+            </h1>
+          </div>
+
+          <div className="browse-filter">
+            <button
+              className="browse-toggle"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              aria-haspopup="menu"
+              aria-expanded={isDropdownOpen}
+            >
               Browse {isDropdownOpen ? '▲' : '▼'}
             </button>
+
             {isDropdownOpen && (
               <>
-                <button onClick={() => {
-                  setRendered('popular');
-                  handleButtonClick();
-                  setIsDropdownOpen(false);
-                }}>Popular<i className="fas fa-fire"></i></button>
-                <button onClick={() => {
-                  setRendered('airing');
-                  getAiringAnime();
-                  handleButtonClick();
-                  setIsDropdownOpen(false);
-                }}>Airing</button>
-                <button onClick={() => {
-                  setRendered('upcoming');
-                  getUpcomingAnime();
-                  handleButtonClick();
-                  setIsDropdownOpen(false);
-                }}>Upcoming</button>
+                <div
+                  className="menu"
+                  role="menu"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className="menu-btn"
+                    role="menuitem"
+                    onClick={() => {
+                      setRendered('popular');
+                      handleButtonClick();
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    Popular
+                  </button>
+
+                  <button
+                    className="menu-btn"
+                    role="menuitem"
+                    onClick={() => {
+                      setRendered('airing');
+                      getAiringAnime();
+                      handleButtonClick();
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    Airing
+                  </button>
+
+                  <button
+                    className="menu-btn"
+                    role="menuitem"
+                    onClick={() => {
+                      setRendered('upcoming');
+                      getUpcomingAnime();
+                      handleButtonClick();
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    Upcoming
+                  </button>
+                </div>
+
+                {/* click-away to close */}
+                <div
+                  className="overlay"
+                  onClick={() => setIsDropdownOpen(false)}
+                />
               </>
             )}
           </div>
         </div>
       </header>
+
       {switchComponent()}
-    </HomepageStyled >
+    </HomepageStyled>
   );
 }
 
 const HomepageStyled = styled.div`
-    background-color: black;
-    padding-top: 60px;
-    header{
-        padding: 2rem 15rem;
-    }
+  background: var(--bg);
+  color: var(--text);
+  padding-top: 60px;
 
-    button {
-    margin: 1vmin;
-    padding: 1vmin;
-    color: black;
-    background-color: orange;
-    font-size: 2vmin;
-    text-decoration: none;
-    text-align: center;
-    border: .1vmin solid var(--tan-2);
-    border-radius: .5vmin;
+  header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--ring);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.25rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.25rem, 2vw + 0.5rem, 2rem);
+    color: var(--text);
+  }
+
+  .browse-filter {
+    position: relative;
+  }
+
+  .browse-toggle {
+    margin: 0;
+    padding: 10px 14px;
+    color: #fff;
+    background-color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
     outline: none;
     cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .browse-toggle:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
 
-    /* Add transition for smooth hover effect */
-    transition: all 0.3s ease; 
-}
+  .menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--ring);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 220px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    z-index: 5;
+  }
 
-button:hover {
-    /* Enlarge the button on hover */
-    transform: scale(1.1); 
+  .menu-btn {
+    width: 100%;
+    margin: 6px 0;
+    padding: 10px 12px;
+    color: #fff;
+    background-color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .menu-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
 
-    /* Lighten the button color on hover */
-    background-color: #ffb732; 
-}
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 4; /* below menu */
+  }
 
-`
+  @media (max-width: 900px) {
+    .container {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .browse-filter {
+      align-self: flex-end;
+    }
+  }
+`;
 
-export default Homepage
+export default Homepage;
